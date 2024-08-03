@@ -1,0 +1,1 @@
+enum WidgetState { initial, loading, loaded, error }
