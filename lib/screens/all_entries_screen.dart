@@ -27,7 +27,10 @@ class AllEntriesScreen extends ConsumerWidget {
     });
 
     return Scaffold(
-      appBar: ResponsiveAppBar(context: context, title: 'All Entries'),
+      appBar: ResponsiveAppBar(
+        context: context,
+        title: context.l10n.allEntries,
+      ),
       body: Center(
         child: SizedBox(
           width: context.largerThanMobile ? context.width * 0.3 : context.width,

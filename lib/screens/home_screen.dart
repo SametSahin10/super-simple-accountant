@@ -36,9 +36,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.didChangeDependencies();
     final locale = Localizations.localeOf(context);
 
-    currencyFormatter ??= NumberFormat.simpleCurrency(
-      locale: locale.toString(),
-    );
+    currencyFormatter ??=
+        NumberFormat.simpleCurrency(locale: locale.toString());
   }
 
   @override
@@ -46,7 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       appBar: ResponsiveAppBar(
         context: context,
-        title: "Super Simple Accountant",
+        title: context.l10n.appTitle,
         showAppIcon: context.largerThanMobile ? true : false,
       ),
       body: _HomeScreenBody(currencyFormatter: currencyFormatter!),
@@ -73,6 +72,7 @@ class _HomeScreenBody extends ConsumerWidget {
         ref.watch(entriesStateNotifierProvider.notifier);
 
     final netAmount = entriesStateNotifier.getNetAmount();
+    final formattedCurrency = _getFormattedCurrency(context, netAmount);
 
     return Center(
       child: SizedBox(
@@ -88,7 +88,7 @@ class _HomeScreenBody extends ConsumerWidget {
                     : MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    currencyFormatter.format(netAmount),
+                    formattedCurrency,
                     style: TextStyle(
                       fontSize: context.largerThanMobile ? 64 : 48,
                     ),
@@ -115,6 +115,18 @@ class _HomeScreenBody extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String _getFormattedCurrency(BuildContext context, double netAmount) {
+    final formattedCurrency = currencyFormatter.format(netAmount);
+    final local = Localizations.localeOf(context);
+
+    if (local.languageCode == "tr" && formattedCurrency.startsWith("TL")) {
+      final currencyWithoutSymbol = formattedCurrency.substring(2);
+      return "₺$currencyWithoutSymbol";
+    } else {
+      return formattedCurrency;
+    }
   }
 }
 

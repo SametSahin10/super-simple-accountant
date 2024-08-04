@@ -65,10 +65,8 @@ class _ShowMoreWidget extends StatelessWidget {
         );
       },
       child: Text(
-        "See more",
-        style: TextStyle(
-          fontSize: context.largerThanMobile ? 20.0 : 16.0,
-        ),
+        context.l10n.seeMore,
+        style: TextStyle(fontSize: context.largerThanMobile ? 20.0 : 16.0),
       ),
     );
   }

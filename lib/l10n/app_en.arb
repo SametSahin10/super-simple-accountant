@@ -1,0 +1,9 @@
+{
+  "appTitle": "Super Simple Accountant",
+  "addEntry": "Add Entry",
+  "seeMore": "See more",
+  "noDescription": "No description",
+  "amountTextFieldHint": "Amount",
+  "descriptionTextFieldHint": "Description (optional)",
+  "allEntries": "All Entries"
+}

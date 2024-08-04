@@ -21,7 +21,10 @@ class AddEntryScreen extends ConsumerWidget {
     final descriptionController = addEntryScreenModel.descriptionController;
 
     return Scaffold(
-      appBar: ResponsiveAppBar(context: context, title: "Add Entry"),
+      appBar: ResponsiveAppBar(
+        context: context,
+        title: context.l10n.addEntry,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -43,9 +46,9 @@ class AddEntryScreen extends ConsumerWidget {
                         keyboardType: TextInputType.number,
                         style: const TextStyle(fontSize: 32.0),
                         autofocus: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Amount',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: context.l10n.amountTextFieldHint,
+                          border: const OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -54,9 +57,9 @@ class AddEntryScreen extends ConsumerWidget {
                         child: TextField(
                           controller: descriptionController,
                           style: const TextStyle(fontSize: 28.0),
-                          decoration: const InputDecoration(
-                            labelText: 'Description (optional)',
-                            border: OutlineInputBorder(),
+                          decoration: InputDecoration(
+                            labelText: context.l10n.descriptionTextFieldHint,
+                            border: const OutlineInputBorder(),
                           ),
                         ),
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
 import 'package:super_simple_accountant/widgets/text_with_top_padding.dart';
 
@@ -14,10 +15,10 @@ class AddEntryButton extends StatelessWidget {
             ),
           ),
       onPressed: () => pushAddEntryScreen(context),
-      child: const TextWithTopPadding(
+      child: TextWithTopPadding(
         text: Text(
-          "Add Entry",
-          style: TextStyle(color: Colors.white, fontSize: 22),
+          context.l10n.addEntry,
+          style: const TextStyle(color: Colors.white, fontSize: 22),
         ),
       ),
     );

@@ -19,7 +19,7 @@ class EntryListTile extends StatelessWidget {
         (entry.description != null) && entry.description?.isEmpty == false;
 
     final description =
-        descriptionExists ? entry.description : "No description";
+        descriptionExists ? entry.description : context.l10n.noDescription;
 
     final amountPrefixSign = entry.amount.isNegative ? "" : "+";
 
