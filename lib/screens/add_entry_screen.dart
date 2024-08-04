@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/constants.dart';
+import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/entry_action_button.dart';
+import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
 
 class AddEntryScreen extends ConsumerWidget {
   const AddEntryScreen({super.key});
@@ -19,48 +21,58 @@ class AddEntryScreen extends ConsumerWidget {
     final descriptionController = addEntryScreenModel.descriptionController;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Entry'),
-      ),
+      appBar: ResponsiveAppBar(context: context, title: "Add Entry"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const BannerAdWidget(adUnitId: addEntryScreenBannerAdId),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextField(
-                    controller: amountController,
-                    keyboardType: TextInputType.number,
-                    style: const TextStyle(fontSize: 32.0),
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Amount',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: TextField(
-                      controller: descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description (optional)',
-                        border: OutlineInputBorder(),
+        child: Center(
+          child: SizedBox(
+            width:
+                context.largerThanMobile ? context.width * 0.3 : context.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const BannerAdWidget(adUnitId: addEntryScreenBannerAdId),
+                Flexible(
+                  flex: 3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextField(
+                        controller: amountController,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(fontSize: 32.0),
+                        autofocus: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Amount',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: TextField(
+                          controller: descriptionController,
+                          style: const TextStyle(fontSize: 28.0),
+                          decoration: const InputDecoration(
+                            labelText: 'Description (optional)',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Flexible(
+                  flex: context.largerThanMobile ? 4 : 1,
+                  child: const Padding(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: _IncreaseAndDecreaseButtons(),
+                  ),
+                ),
+              ],
             ),
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8),
-              child: _IncreaseAndDecreaseButtons(),
-            ),
-          ],
+          ),
         ),
       ),
     );

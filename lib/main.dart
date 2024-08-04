@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/firebase_options.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
 
@@ -22,7 +23,7 @@ void main() async {
     return true;
   };
 
-  MobileAds.instance.initialize();
+  if (!kIsWeb) MobileAds.instance.initialize();
 
   runApp(
     const ProviderScope(
@@ -40,8 +41,17 @@ class MyApp extends StatelessWidget {
       title: 'Super Simple Accountant',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primaryColor: primaryColor,
         useMaterial3: true,
         fontFamily: GoogleFonts.josefinSans().fontFamily,
+        appBarTheme: const AppBarTheme(centerTitle: true),
+        buttonTheme: const ButtonThemeData(
+          buttonColor: primaryColor,
+          textTheme: ButtonTextTheme.primary,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+        ),
       ),
       debugShowCheckedModeBanner: true,
       home: const HomeScreen(),

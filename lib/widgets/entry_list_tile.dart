@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 
 class EntryListTile extends StatelessWidget {
@@ -25,13 +26,18 @@ class EntryListTile extends StatelessWidget {
     final amountText =
         amountPrefixSign + currencyFormatter.format(entry.amount);
 
+    final fontSize = context.largerThanMobile ? 24.0 : 16.0;
+
     return ListTile(
-      title: Text(description!),
+      title: Text(
+        description!,
+        style: TextStyle(fontSize: fontSize),
+      ),
       trailing: Text(
         amountText,
         style: TextStyle(
           color: entry.amount.isNegative ? Colors.red : Colors.green,
-          fontSize: 16,
+          fontSize: fontSize,
         ),
       ),
     );

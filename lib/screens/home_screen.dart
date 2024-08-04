@@ -3,11 +3,15 @@ import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/assets.dart';
+import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/constants.dart';
 import 'package:super_simple_accountant/enums.dart';
+import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/state/providers.dart';
+import 'package:super_simple_accountant/widgets/add_entry_button.dart';
 import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/brief_entries_widget.dart';
+import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
 
 import 'add_entry_screen.dart';
 
@@ -19,7 +23,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  late final NumberFormat currencyFormatter;
+  NumberFormat? currencyFormatter;
 
   @override
   void initState() {
@@ -32,7 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.didChangeDependencies();
     final locale = Localizations.localeOf(context);
 
-    currencyFormatter = NumberFormat.simpleCurrency(
+    currencyFormatter ??= NumberFormat.simpleCurrency(
       locale: locale.toString(),
     );
   }
@@ -40,22 +44,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Super Simple Accountant'),
-        centerTitle: true,
+      appBar: ResponsiveAppBar(
+        context: context,
+        title: "Super Simple Accountant",
+        showAppIcon: context.largerThanMobile ? true : false,
       ),
-      body: _HomeScreenBody(currencyFormatter: currencyFormatter),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _pushAddEntryScreen,
-        child: Image.asset(Assets.fountainPen, scale: 3.8, color: Colors.black),
-      ),
-    );
-  }
-
-  void _pushAddEntryScreen() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const AddEntryScreen()),
+      body: _HomeScreenBody(currencyFormatter: currencyFormatter!),
+      floatingActionButton:
+          context.largerThanMobile ? null : const _FloatingActionButton(),
     );
   }
 }
@@ -78,49 +74,66 @@ class _HomeScreenBody extends ConsumerWidget {
 
     final netAmount = entriesStateNotifier.getNetAmount();
 
-    final innerColumnChildren = <Widget>[
-      Text(
-        currencyFormatter.format(netAmount),
-        style: const TextStyle(fontSize: 48.0),
-      ),
-    ];
-
-    if (entriesStateModel.entries.isNotEmpty) {
-      innerColumnChildren.addAll([
-        BriefEntriesWidget(currencyFormatter: currencyFormatter),
-      ]);
-    }
-
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const BannerAdWidget(adUnitId: homeScreenBannerAdId),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Flexible(
-                  flex: 6,
-                  child: Text(
+      child: SizedBox(
+        width: context.largerThanMobile ? context.width * 0.3 : context.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const BannerAdWidget(adUnitId: homeScreenBannerAdId),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: context.largerThanMobile
+                    ? MainAxisAlignment.spaceAround
+                    : MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
                     currencyFormatter.format(netAmount),
-                    style: const TextStyle(fontSize: 48.0),
-                  ),
-                ),
-                Flexible(
-                  flex: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12),
-                    child: BriefEntriesWidget(
-                      currencyFormatter: currencyFormatter,
+                    style: TextStyle(
+                      fontSize: context.largerThanMobile ? 64 : 48,
                     ),
                   ),
-                ),
-              ],
+                  if (entriesStateModel.entries.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: BriefEntriesWidget(
+                        currencyFormatter: currencyFormatter,
+                      ),
+                    ),
+                  if (context.largerThanMobile)
+                    const Flexible(
+                      flex: 2,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 24),
+                        child: AddEntryButton(),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+class _FloatingActionButton extends StatelessWidget {
+  const _FloatingActionButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: primaryColor,
+      onPressed: () => pushAddEntryScreen(context),
+      child: Image.asset(Assets.fountainPen, scale: 3.8),
+    );
+  }
+}
+
+void pushAddEntryScreen(BuildContext context) async {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => const AddEntryScreen()),
+  );
 }

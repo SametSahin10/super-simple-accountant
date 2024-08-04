@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/screens/all_entries_screen.dart';
 import 'package:super_simple_accountant/state/providers.dart';
@@ -63,7 +64,12 @@ class _ShowMoreWidget extends StatelessWidget {
           ),
         );
       },
-      child: const Text("See more"),
+      child: Text(
+        "See more",
+        style: TextStyle(
+          fontSize: context.largerThanMobile ? 20.0 : 16.0,
+        ),
+      ),
     );
   }
 }
