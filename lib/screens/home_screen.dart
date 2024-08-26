@@ -121,9 +121,11 @@ class _HomeScreenBody extends ConsumerWidget {
     final formattedCurrency = currencyFormatter.format(netAmount);
     final local = Localizations.localeOf(context);
 
-    if (local.languageCode == "tr" && formattedCurrency.startsWith("TL")) {
-      final currencyWithoutSymbol = formattedCurrency.substring(2);
-      return "₺$currencyWithoutSymbol";
+    final currencyIsTL = formattedCurrency.contains("TL");
+    final replaceCurrencySymbol = local.languageCode == "tr" && currencyIsTL;
+
+    if (replaceCurrencySymbol) {
+      return formattedCurrency.replaceFirst("TL", "₺");
     } else {
       return formattedCurrency;
     }
