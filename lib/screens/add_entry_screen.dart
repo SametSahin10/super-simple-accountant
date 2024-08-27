@@ -4,9 +4,12 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/constants.dart';
 import 'package:super_simple_accountant/extensions.dart';
+import 'package:super_simple_accountant/models/category.dart';
 import 'package:super_simple_accountant/models/entry.dart';
+import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
+import 'package:super_simple_accountant/widgets/category_dropdown.dart';
 import 'package:super_simple_accountant/widgets/entry_action_button.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
 
@@ -20,26 +23,26 @@ class AddEntryScreen extends ConsumerWidget {
     final amountController = addEntryScreenModel.amountController;
     final descriptionController = addEntryScreenModel.descriptionController;
 
-    return Scaffold(
-      appBar: ResponsiveAppBar(
-        context: context,
-        title: context.l10n.addEntry,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SizedBox(
-            width:
-                context.largerThanMobile ? context.width * 0.3 : context.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const BannerAdWidget(adUnitId: addEntryScreenBannerAdId),
-                Flexible(
-                  flex: 3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: ResponsiveAppBar(
+          context: context,
+          title: context.l10n.addEntry,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: SizedBox(
+              width: context.largerThanMobile
+                  ? context.width * 0.3
+                  : context.width,
+              child: ListView(
+                children: [
+                  const BannerAdWidget(adUnitId: addEntryScreenBannerAdId),
+                  const SizedBox(height: 70),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       TextField(
                         controller: amountController,
@@ -63,17 +66,23 @@ class AddEntryScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10),
+                      CategoryDropdown(
+                        onCategorySelected: (selectedCategory) {
+                          final notifier = ref
+                              .read(selectedCategoryNotifierProvider.notifier);
+
+                          notifier.setSelectedCategory(selectedCategory);
+                        },
+                      ),
                     ],
                   ),
-                ),
-                Flexible(
-                  flex: context.largerThanMobile ? 4 : 1,
-                  child: const Padding(
-                    padding: EdgeInsets.only(bottom: 8),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 36, bottom: 8),
                     child: _IncreaseAndDecreaseButtons(),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -87,24 +96,42 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedCategory = ref.watch(selectedCategoryNotifierProvider);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         EntryActionButton(
           iconPath: Assets.minus,
           color: Colors.red,
-          onTap: () => _decreaseAmount(context, ref),
+          onTap: () {
+            _decreaseAmount(
+              context: context,
+              ref: ref,
+              selectedCategory: selectedCategory,
+            );
+          },
         ),
         EntryActionButton(
           iconPath: Assets.plus,
           color: Colors.green,
-          onTap: () => _increaseAmount(context, ref),
+          onTap: () {
+            _increaseAmount(
+              context: context,
+              ref: ref,
+              selectedCategory: selectedCategory,
+            );
+          },
         ),
       ],
     );
   }
 
-  void _increaseAmount(BuildContext context, WidgetRef ref) {
+  void _increaseAmount({
+    required BuildContext context,
+    required WidgetRef ref,
+    required Category? selectedCategory,
+  }) {
     final addEntryScreenModel = ref.read(addEntryScreenModelProvider);
 
     final amountController = addEntryScreenModel.amountController;
@@ -125,6 +152,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     final entry = Entry(
       amount: currentAmount.abs(),
       description: description,
+      category: selectedCategory,
       createdAt: DateTime.now(),
     );
 
@@ -134,7 +162,11 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     if (askForInAppReview) _requestInAppReviewAfterDelay();
   }
 
-  void _decreaseAmount(BuildContext context, WidgetRef ref) {
+  void _decreaseAmount({
+    required BuildContext context,
+    required WidgetRef ref,
+    required Category? selectedCategory,
+  }) {
     final addEntryScreenModel = ref.read(addEntryScreenModelProvider);
 
     final amountController = addEntryScreenModel.amountController;
@@ -155,6 +187,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     final entry = Entry(
       amount: -currentAmount.abs(),
       description: description,
+      category: selectedCategory,
       createdAt: DateTime.now(),
     );
 

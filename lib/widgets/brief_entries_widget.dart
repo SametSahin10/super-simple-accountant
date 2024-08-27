@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/screens/all_entries_screen.dart';
-import 'package:super_simple_accountant/state/providers.dart';
+import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/widgets/entry_list_tile.dart';
 
 class BriefEntriesWidget extends ConsumerWidget {

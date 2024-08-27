@@ -1,21 +1,20 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_simple_accountant/models/add_entry_screen_model.dart';
-import 'package:super_simple_accountant/models/entries_state_model.dart';
-import 'package:super_simple_accountant/repositories/entry_repository.dart';
-import 'package:super_simple_accountant/state/entries_state_notifier.dart';
+import 'package:super_simple_accountant/models/category.dart';
 
-final entriesStateNotifierProvider =
-    StateNotifierProvider<EntriesStateNotifier, EntriesStateModel>((_) {
-  final entriesStateModel = EntriesStateModel.initial();
-  final entryRepository = EntryRepository();
+part 'providers.g.dart';
 
-  return EntriesStateNotifier(
-    entryRepository: entryRepository,
-    entriesStateModel: entriesStateModel,
-  );
-});
-
-final addEntryScreenModelProvider =
-    Provider.autoDispose<AddEntryScreenModel>((_) {
+@riverpod
+AddEntryScreenModel addEntryScreenModel(AddEntryScreenModelRef ref) {
   return AddEntryScreenModel();
-});
+}
+
+@riverpod
+class SelectedCategoryNotifier extends _$SelectedCategoryNotifier {
+  @override
+  Category? build() => null;
+
+  setSelectedCategory(Category category) {
+    state = category;
+  }
+}

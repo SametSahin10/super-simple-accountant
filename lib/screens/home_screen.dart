@@ -7,7 +7,7 @@ import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/constants.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
-import 'package:super_simple_accountant/state/providers.dart';
+import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/widgets/add_entry_button.dart';
 import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/brief_entries_widget.dart';

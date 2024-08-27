@@ -5,5 +5,13 @@
   "noDescription": "Açıklama yok",
   "amountTextFieldHint": "Miktar",
   "descriptionTextFieldHint": "Açıklama (isteğe bağlı)",
-  "allEntries": "Tüm Kayıtlar"
+  "allEntries": "Tüm Kayıtlar",
+  "categoryDropdownHint": "Kategori (isteğe bağlı)",
+  "categoryFoodAndDrinks": "Yiyecek & İçecek",
+  "categoryShopping": "Alışveriş",
+  "categoryTransport": "Ulaşım",
+  "categoryHome": "Ev",
+  "categoryEntertainment": "Eğlence",
+  "categoryHealth": "Sağlık",
+  "categoryOther": "Diğer"
 }

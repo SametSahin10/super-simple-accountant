@@ -5,5 +5,13 @@
   "noDescription": "No description",
   "amountTextFieldHint": "Amount",
   "descriptionTextFieldHint": "Description (optional)",
-  "allEntries": "All Entries"
+  "allEntries": "All Entries",
+  "categoryDropdownHint": "Category (optional)",
+  "categoryFoodAndDrinks": "Food & Drinks",
+  "categoryShopping": "Shopping",
+  "categoryTransport": "Transport",
+  "categoryHome": "Home",
+  "categoryEntertainment": "Entertainment",
+  "categoryHealth": "Health",
+  "categoryOther": "Other"
 }

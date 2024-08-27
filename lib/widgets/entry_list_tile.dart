@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
+import 'package:super_simple_accountant/widgets/entry_details_bottom_sheet.dart';
 
 class EntryListTile extends StatelessWidget {
   final Entry entry;
@@ -40,6 +41,17 @@ class EntryListTile extends StatelessWidget {
           fontSize: fontSize,
         ),
       ),
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          builder: (_) {
+            return EntryDetailsBottomSheet(
+              entry: entry,
+              amountText: amountText,
+            );
+          },
+        );
+      },
     );
   }
 }

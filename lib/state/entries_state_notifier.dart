@@ -1,21 +1,21 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/models/entries_state_model.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/repositories/entry_repository.dart';
 
-class EntriesStateNotifier extends StateNotifier<EntriesStateModel> {
-  final EntryRepository entryRepository;
+part 'entries_state_notifier.g.dart';
 
-  EntriesStateNotifier({
-    required this.entryRepository,
-    required EntriesStateModel entriesStateModel,
-  }) : super(entriesStateModel) {
-    getLocalEntries();
+@riverpod
+class EntriesStateNotifier extends _$EntriesStateNotifier {
+  @override
+  EntriesStateModel build() {
+    return EntriesStateModel.initial();
   }
 
   void getLocalEntries() async {
     state = state.copyWith(widgetState: WidgetState.loading);
+    final entryRepository = EntryRepository();
     final entries = await entryRepository.getEntries();
     state = state.copyWith(entries: entries, widgetState: WidgetState.loaded);
   }
@@ -24,6 +24,7 @@ class EntriesStateNotifier extends StateNotifier<EntriesStateModel> {
     final newEntries = [...state.entries, entry];
     state = state.copyWith(entries: newEntries);
 
+    final entryRepository = EntryRepository();
     entryRepository.saveEntry(entry);
   }
 

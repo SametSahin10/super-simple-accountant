@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
-import 'package:super_simple_accountant/state/providers.dart';
+import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/widgets/entry_list_tile.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
 

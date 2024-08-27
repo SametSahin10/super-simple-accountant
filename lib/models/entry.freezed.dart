@@ -23,6 +23,7 @@ mixin _$Entry {
   double get amount => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
+  Category? get category => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,13 @@ abstract class $EntryCopyWith<$Res> {
   factory $EntryCopyWith(Entry value, $Res Function(Entry) then) =
       _$EntryCopyWithImpl<$Res, Entry>;
   @useResult
-  $Res call({double amount, DateTime createdAt, String? description});
+  $Res call(
+      {double amount,
+      DateTime createdAt,
+      String? description,
+      Category? category});
+
+  $CategoryCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -53,6 +60,7 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
     Object? amount = null,
     Object? createdAt = null,
     Object? description = freezed,
+    Object? category = freezed,
   }) {
     return _then(_value.copyWith(
       amount: null == amount
@@ -67,7 +75,23 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as Category?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CategoryCopyWith<$Res>? get category {
+    if (_value.category == null) {
+      return null;
+    }
+
+    return $CategoryCopyWith<$Res>(_value.category!, (value) {
+      return _then(_value.copyWith(category: value) as $Val);
+    });
   }
 }
 
@@ -78,7 +102,14 @@ abstract class _$$EntryImplCopyWith<$Res> implements $EntryCopyWith<$Res> {
       __$$EntryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double amount, DateTime createdAt, String? description});
+  $Res call(
+      {double amount,
+      DateTime createdAt,
+      String? description,
+      Category? category});
+
+  @override
+  $CategoryCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -95,6 +126,7 @@ class __$$EntryImplCopyWithImpl<$Res>
     Object? amount = null,
     Object? createdAt = null,
     Object? description = freezed,
+    Object? category = freezed,
   }) {
     return _then(_$EntryImpl(
       amount: null == amount
@@ -109,6 +141,10 @@ class __$$EntryImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as Category?,
     ));
   }
 }
@@ -117,7 +153,10 @@ class __$$EntryImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$EntryImpl implements _Entry {
   _$EntryImpl(
-      {required this.amount, required this.createdAt, this.description});
+      {required this.amount,
+      required this.createdAt,
+      this.description,
+      this.category});
 
   factory _$EntryImpl.fromJson(Map<String, dynamic> json) =>
       _$$EntryImplFromJson(json);
@@ -128,10 +167,12 @@ class _$EntryImpl implements _Entry {
   final DateTime createdAt;
   @override
   final String? description;
+  @override
+  final Category? category;
 
   @override
   String toString() {
-    return 'Entry(amount: $amount, createdAt: $createdAt, description: $description)';
+    return 'Entry(amount: $amount, createdAt: $createdAt, description: $description, category: $category)';
   }
 
   @override
@@ -143,12 +184,15 @@ class _$EntryImpl implements _Entry {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.description, description) ||
-                other.description == description));
+                other.description == description) &&
+            (identical(other.category, category) ||
+                other.category == category));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, amount, createdAt, description);
+  int get hashCode =>
+      Object.hash(runtimeType, amount, createdAt, description, category);
 
   @JsonKey(ignore: true)
   @override
@@ -168,7 +212,8 @@ abstract class _Entry implements Entry {
   factory _Entry(
       {required final double amount,
       required final DateTime createdAt,
-      final String? description}) = _$EntryImpl;
+      final String? description,
+      final Category? category}) = _$EntryImpl;
 
   factory _Entry.fromJson(Map<String, dynamic> json) = _$EntryImpl.fromJson;
 
@@ -178,6 +223,8 @@ abstract class _Entry implements Entry {
   DateTime get createdAt;
   @override
   String? get description;
+  @override
+  Category? get category;
   @override
   @JsonKey(ignore: true)
   _$$EntryImplCopyWith<_$EntryImpl> get copyWith =>
