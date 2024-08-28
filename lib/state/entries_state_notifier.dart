@@ -10,7 +10,9 @@ part 'entries_state_notifier.g.dart';
 class EntriesStateNotifier extends _$EntriesStateNotifier {
   @override
   EntriesStateModel build() {
-    return EntriesStateModel.initial();
+    state = EntriesStateModel.initial();
+    getLocalEntries();
+    return state;
   }
 
   void getLocalEntries() async {
