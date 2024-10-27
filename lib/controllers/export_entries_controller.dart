@@ -13,7 +13,7 @@ class ExportEntriesController {
   const ExportEntriesController({required this.currencyFormatter});
 
   void onExport(BuildContext context, List<Entry> copyOfAllEntries) async {
-    context.showProgressDialog(text: "Exporting...");
+    context.showProgressDialog(text: context.l10n.exportingEntries);
 
     try {
       final pdfInBytes = await _generatePdf(copyOfAllEntries);
@@ -80,11 +80,12 @@ class ExportEntriesController {
 
   void _handleError(BuildContext context, Object error) {
     debugPrint('Error generating PDF: $error');
+
     if (context.mounted) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('An error occurred while exporting'),
+        SnackBar(
+          content: Text(context.l10n.exportEntriesError),
         ),
       );
     }

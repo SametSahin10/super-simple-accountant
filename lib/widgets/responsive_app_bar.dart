@@ -40,11 +40,11 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
                   }
                 },
                 itemBuilder: (BuildContext context) => [
-                  const PopupMenuItem<String>(
+                  PopupMenuItem<String>(
                     value: 'export',
                     child: Text(
-                      'Export',
-                      style: TextStyle(fontSize: 16),
+                      context.l10n.exportEntries,
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                 ],

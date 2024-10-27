@@ -13,5 +13,8 @@
   "categoryHome": "Home",
   "categoryEntertainment": "Entertainment",
   "categoryHealth": "Health",
-  "categoryOther": "Other"
+  "categoryOther": "Other",
+  "exportEntries": "Export",
+  "exportingEntries": "Exporting entries...",
+  "exportEntriesError": "Error exporting entries."
 }
