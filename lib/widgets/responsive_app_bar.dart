@@ -6,12 +6,16 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext context;
   final String title;
   final bool showAppIcon;
+  final bool showMenu;
+  final VoidCallback? onExport;
 
   const ResponsiveAppBar({
     super.key,
     required this.context,
     required this.title,
     this.showAppIcon = false,
+    this.showMenu = false,
+    this.onExport,
   });
 
   @override
@@ -27,6 +31,26 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
       ),
+      actions: showMenu
+          ? [
+              PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'export' && onExport != null) {
+                    onExport!();
+                  }
+                },
+                itemBuilder: (BuildContext context) => [
+                  const PopupMenuItem<String>(
+                    value: 'export',
+                    child: Text(
+                      'Export',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ]
+          : null,
     );
   }
 
