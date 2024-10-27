@@ -1,25 +1,24 @@
-import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class PdfCreatorService {
   final NumberFormat currencyFormatter;
 
   const PdfCreatorService({required this.currencyFormatter});
 
-  Future<String> createPdf(List<Entry> entries) async {
+  Future<Uint8List> createPdf(List<Entry> entries) async {
     final pdf = await _generatePdf(entries);
-    return await _createPdfFile(pdf);
+    return pdf.save();
   }
 
   Future<pw.Document> _generatePdf(List<Entry> entries) async {
     final pdf = pw.Document();
-    final appIcon = await _loadAppIcon();
+    final appIcon = kIsWeb ? null : await _loadAppIcon();
 
     pdf.addPage(
       pw.Page(
@@ -28,7 +27,7 @@ class PdfCreatorService {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              _buildHeaderRow(appIcon),
+              if (!kIsWeb) _buildHeaderRow(appIcon!),
               pw.SizedBox(height: 20),
               _buildHeader(),
               pw.SizedBox(height: 20),
@@ -151,13 +150,5 @@ class PdfCreatorService {
         color: entry.amount.isNegative ? PdfColors.red : PdfColors.green,
       ),
     );
-  }
-
-  Future<String> _createPdfFile(pw.Document pdf) async {
-    final output = await getApplicationDocumentsDirectory();
-    final today = DateTime.now().toIso8601String().split('T')[0];
-    final file = File('${output.path}/entries_$today.pdf');
-    await file.writeAsBytes(await pdf.save());
-    return file.path;
   }
 }
