@@ -30,6 +30,14 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
     entryRepository.saveEntry(entry);
   }
 
+  void deleteEntry(Entry entry) {
+    final newEntries = state.entries.where((e) => e != entry).toList();
+    state = state.copyWith(entries: newEntries);
+
+    final entryRepository = EntryRepository();
+    entryRepository.deleteEntry(entry);
+  }
+
   double getNetAmount() {
     double netAmount = 0;
 

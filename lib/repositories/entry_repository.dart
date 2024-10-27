@@ -20,6 +20,17 @@ class EntryRepository {
     );
   }
 
+  Future<void> deleteEntry(Entry entry) async {
+    final prefs = await SharedPreferences.getInstance();
+    final entries = await getEntries();
+    final newEntries = entries.where((e) => e != entry).toList();
+
+    await prefs.setStringList(
+      _key,
+      newEntries.map((entry) => jsonEncode(entry.toJson())).toList(),
+    );
+  }
+
   Future<List<Entry>> getEntries() async {
     final prefs = await SharedPreferences.getInstance();
     final entriesJson = prefs.getStringList(_key) ?? [];

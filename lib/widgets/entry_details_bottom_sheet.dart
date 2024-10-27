@@ -4,6 +4,7 @@ import 'package:super_simple_accountant/default_categories.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 
 import 'package:intl/intl.dart';
+import 'package:super_simple_accountant/widgets/delete_entry_button.dart';
 
 class EntryDetailsBottomSheet extends StatelessWidget {
   final Entry entry;
@@ -22,7 +23,7 @@ class EntryDetailsBottomSheet extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 240,
+      height: 280,
       padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,6 +70,14 @@ class EntryDetailsBottomSheet extends StatelessWidget {
               formattedDate,
               style: const TextStyle(fontSize: 16.0),
             ),
+          ),
+          const Spacer(),
+          DeleteEntryButton(
+            entry: entry,
+            onDelete: () {
+              // Hide the bottom sheet.
+              Navigator.of(context).pop();
+            },
           ),
         ],
       ),
