@@ -32,7 +32,7 @@ class AllEntriesScreen extends ConsumerWidget {
       appBar: ResponsiveAppBar(
         context: context,
         title: context.l10n.allEntries,
-        showMenu: kIsWeb ? false : true,
+        showMenu: true,
         onExport: () {
           final exportEntriesController =
               ExportEntriesController(currencyFormatter: currencyFormatter);
