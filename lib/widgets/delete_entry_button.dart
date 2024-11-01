@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 
@@ -23,9 +24,9 @@ class DeleteEntryButton extends ConsumerWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,
       ),
-      child: const Text(
-        'Delete',
-        style: TextStyle(color: Colors.white, fontSize: 16.0),
+      child: Text(
+        context.l10n.deleteEntry,
+        style: const TextStyle(color: Colors.white, fontSize: 16.0),
       ),
     );
   }

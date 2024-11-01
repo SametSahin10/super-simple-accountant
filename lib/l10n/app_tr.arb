@@ -16,5 +16,6 @@
   "categoryOther": "Diğer",
   "exportEntries": "Dışa Aktar",
   "exportingEntries": "Dışa Aktarılıyor...",
-  "exportEntriesError": "Dışa Aktarılırken bir hata oluştu."
+  "exportEntriesError": "Dışa Aktarılırken bir hata oluştu.",
+  "deleteEntry": "Sil"
 }

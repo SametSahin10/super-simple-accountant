@@ -45,7 +45,12 @@ class EntryDetailsBottomSheet extends StatelessWidget {
           ),
           if (entry.category != null)
             Builder(builder: (context) {
-              final icon = categoryIcons[entry.category!.id];
+              final categoryId = entry.category!.id;
+
+              final icon = categoryIcons[categoryId];
+
+              final categoryName =
+                  getTranslatedCategoryName(context, categoryId);
 
               return Padding(
                 padding: const EdgeInsets.only(top: 18),
@@ -56,7 +61,7 @@ class EntryDetailsBottomSheet extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 3),
                       child: Text(
-                        entry.category!.name,
+                        categoryName,
                         style: const TextStyle(fontSize: 16.0),
                       ),
                     ),
