@@ -29,9 +29,12 @@ class DeleteEntryButton extends ConsumerWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,
       ),
-      child: Text(
-        context.l10n.deleteEntry,
-        style: const TextStyle(color: Colors.white, fontSize: 16.0),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Text(
+          context.l10n.deleteEntry,
+          style: const TextStyle(color: Colors.white, fontSize: 16.0),
+        ),
       ),
     );
   }
