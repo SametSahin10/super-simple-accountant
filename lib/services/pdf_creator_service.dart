@@ -20,6 +20,9 @@ class PdfCreatorService {
     final pdf = pw.Document();
     final appIcon = kIsWeb ? null : await _loadAppIcon();
 
+    final netAmount = entries.fold(0.0, (sum, entry) => sum + entry.amount);
+    final formattedCurrency = currencyFormatter.format(netAmount);
+
     pdf.addPage(
       pw.Page(
         pageFormat: PdfPageFormat.a4,
@@ -32,6 +35,8 @@ class PdfCreatorService {
               _buildHeader(),
               pw.SizedBox(height: 20),
               ...entries.map(_buildEntryRow),
+              pw.Divider(),
+              _buildNetAmount(formattedCurrency),
               pw.Spacer(),
               _buildDownloadLink(),
               pw.SizedBox(height: 10),
@@ -131,9 +136,24 @@ class PdfCreatorService {
     );
   }
 
+  pw.Widget _buildNetAmount(String formattedCurrency) {
+    return pw.Row(
+      children: [
+        pw.Spacer(),
+        pw.Text(
+          formattedCurrency,
+          style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
   pw.Widget _buildEntryDescription(Entry entry) {
+    final description = entry.description;
+    final entryExists = description != null && description.isNotEmpty;
+
     return pw.Text(
-      entry.description ?? 'No description',
+      entryExists ? description : 'No description',
       style: const pw.TextStyle(fontSize: 14),
     );
   }
