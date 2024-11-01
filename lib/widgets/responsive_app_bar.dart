@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -72,12 +73,13 @@ class _TitleWithAppIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: Image.asset(Assets.appIconRounded, scale: 3.2),
+          borderRadius: BorderRadius.circular(kIsWeb ? 24 : 10),
+          child: Image.asset(Assets.appIconRounded, scale: kIsWeb ? 3.2 : 6.3),
         ),
-        const SizedBox(width: 24),
+        const SizedBox(width: kIsWeb ? 24 : 16),
         _AppBarTitle(title: title),
       ],
     );
@@ -91,9 +93,12 @@ class _AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(fontSize: context.largerThanMobile ? 32 : 22),
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: context.largerThanMobile ? 32 : 24),
+      ),
     );
   }
 }
