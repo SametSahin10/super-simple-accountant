@@ -17,5 +17,8 @@
   "exportEntries": "Dışa Aktar",
   "exportingEntries": "Dışa Aktarılıyor...",
   "exportEntriesError": "Dışa Aktarılırken bir hata oluştu.",
-  "deleteEntry": "Sil"
+  "deleteEntry": "Sil",
+  "cancel": "İptal",
+  "deleteEntryDialogTitle": "Kayıt Sil",
+  "deleteEntryDialogContent": "Bu kaydı silmek istediğin emin misin?"
 }

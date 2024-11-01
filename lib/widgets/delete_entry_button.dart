@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
+import 'package:super_simple_accountant/utility_functions.dart';
 
 class DeleteEntryButton extends ConsumerWidget {
   final Entry entry;
@@ -17,9 +18,13 @@ class DeleteEntryButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
-      onPressed: () {
-        ref.read(entriesStateNotifierProvider.notifier).deleteEntry(entry);
-        onDelete();
+      onPressed: () async {
+        final confirmed = await showConfirmDeletingEntryDialog(context);
+
+        if (confirmed == true) {
+          ref.read(entriesStateNotifierProvider.notifier).deleteEntry(entry);
+          onDelete();
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,

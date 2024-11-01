@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
+import 'package:super_simple_accountant/state/entries_state_notifier.dart';
+import 'package:super_simple_accountant/utility_functions.dart';
 import 'package:super_simple_accountant/widgets/entry_details_bottom_sheet.dart';
 
-class EntryListTile extends StatelessWidget {
+class EntryListTile extends ConsumerWidget {
   final Entry entry;
   final NumberFormat currencyFormatter;
 
@@ -15,7 +18,7 @@ class EntryListTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final descriptionExists =
         (entry.description != null) && entry.description?.isEmpty == false;
 
@@ -29,29 +32,50 @@ class EntryListTile extends StatelessWidget {
 
     final fontSize = context.largerThanMobile ? 24.0 : 16.0;
 
-    return ListTile(
-      title: Text(
-        description!,
-        style: TextStyle(fontSize: fontSize),
+    return Dismissible(
+      key: Key(entry.createdAt.toString()),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        child: const Icon(Icons.delete, color: Colors.white),
       ),
-      trailing: Text(
-        amountText,
-        style: TextStyle(
-          color: entry.amount.isNegative ? Colors.red : Colors.green,
-          fontSize: fontSize,
-        ),
-      ),
-      onTap: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (_) {
-            return EntryDetailsBottomSheet(
-              entry: entry,
-              amountText: amountText,
-            );
-          },
-        );
+      confirmDismiss: (direction) {
+        return showConfirmDeletingEntryDialog(context);
       },
+      onDismissed: (direction) {
+        if (direction == DismissDirection.endToStart) {
+          final entriesStateNotifier =
+              ref.read(entriesStateNotifierProvider.notifier);
+
+          entriesStateNotifier.deleteEntry(entry);
+        }
+      },
+      child: ListTile(
+        title: Text(
+          description!,
+          style: TextStyle(fontSize: fontSize),
+        ),
+        trailing: Text(
+          amountText,
+          style: TextStyle(
+            color: entry.amount.isNegative ? Colors.red : Colors.green,
+            fontSize: fontSize,
+          ),
+        ),
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (_) {
+              return EntryDetailsBottomSheet(
+                entry: entry,
+                amountText: amountText,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
