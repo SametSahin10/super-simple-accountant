@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:super_simple_accountant/extensions.dart';
 
@@ -14,11 +15,21 @@ class ConfirmDeletingEntryDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
+          onPressed: () {
+            FirebaseAnalytics.instance.logEvent(
+              name: 'cancel_deleting_entry_dialog',
+            );
+            Navigator.of(context).pop(false);
+          },
           child: Text(context.l10n.cancel),
         ),
         TextButton(
-          onPressed: () => Navigator.of(context).pop(true),
+          onPressed: () {
+            FirebaseAnalytics.instance.logEvent(
+              name: 'confirm_deleting_entry_dialog',
+            );
+            Navigator.of(context).pop(true);
+          },
           child: Text(context.l10n.deleteEntry),
         ),
       ],

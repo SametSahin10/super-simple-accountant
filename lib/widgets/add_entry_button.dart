@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
@@ -14,7 +15,13 @@ class AddEntryButton extends StatelessWidget {
               EdgeInsets.symmetric(horizontal: 36, vertical: 12),
             ),
           ),
-      onPressed: () => pushAddEntryScreen(context),
+      onPressed: () {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'add_entry_button_pressed',
+        );
+
+        pushAddEntryScreen(context);
+      },
       child: TextWithTopPadding(
         text: Text(
           context.l10n.addEntry,

@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -53,6 +54,10 @@ class _ShowMoreWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'see_more_entries_button_pressed',
+        );
+
         Navigator.push(
           context,
           MaterialPageRoute(

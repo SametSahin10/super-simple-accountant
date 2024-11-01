@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -19,6 +20,10 @@ class DeleteEntryButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ElevatedButton(
       onPressed: () async {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'delete_entry_button_pressed',
+        );
+
         final confirmed = await showConfirmDeletingEntryDialog(context);
 
         if (confirmed == true) {

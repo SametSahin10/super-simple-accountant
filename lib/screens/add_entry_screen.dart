@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -132,6 +133,10 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     required WidgetRef ref,
     required Category? selectedCategory,
   }) {
+    FirebaseAnalytics.instance.logEvent(
+      name: 'increase_amount_button_pressed',
+    );
+
     final addEntryScreenModel = ref.read(addEntryScreenModelProvider);
 
     final amountController = addEntryScreenModel.amountController;
@@ -157,6 +162,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     );
 
     ref.read(entriesStateNotifierProvider.notifier).addEntry(entry);
+
     Navigator.of(context).pop();
 
     if (askForInAppReview) _requestInAppReviewAfterDelay();
@@ -167,6 +173,10 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     required WidgetRef ref,
     required Category? selectedCategory,
   }) {
+    FirebaseAnalytics.instance.logEvent(
+      name: 'decrease_amount_button_pressed',
+    );
+
     final addEntryScreenModel = ref.read(addEntryScreenModelProvider);
 
     final amountController = addEntryScreenModel.amountController;

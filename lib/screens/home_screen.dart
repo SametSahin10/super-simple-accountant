@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -139,7 +140,13 @@ class _FloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       backgroundColor: primaryColor,
-      onPressed: () => pushAddEntryScreen(context),
+      onPressed: () {
+        FirebaseAnalytics.instance.logEvent(
+          name: 'add_entry_button_pressed',
+        );
+
+        pushAddEntryScreen(context);
+      },
       child: Image.asset(Assets.fountainPen, scale: 3.8),
     );
   }
