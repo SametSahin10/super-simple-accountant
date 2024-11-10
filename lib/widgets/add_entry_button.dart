@@ -1,7 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:super_simple_accountant/extensions.dart';
-import 'package:super_simple_accountant/screens/home_screen.dart';
+import 'package:super_simple_accountant/widgets/add_entry_fab.dart';
 import 'package:super_simple_accountant/widgets/text_with_top_padding.dart';
 
 class AddEntryButton extends StatelessWidget {

@@ -1,10 +1,6 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:super_simple_accountant/assets.dart';
-import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/constants.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -12,9 +8,6 @@ import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/widgets/add_entry_button.dart';
 import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/brief_entries_widget.dart';
-import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
-
-import 'add_entry_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -25,12 +18,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   NumberFormat? currencyFormatter;
-
-  @override
-  void initState() {
-    super.initState();
-    FirebaseMessaging.instance.requestPermission();
-  }
 
   @override
   void didChangeDependencies() {
@@ -44,14 +31,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ResponsiveAppBar(
-        context: context,
-        title: context.l10n.appTitle,
-        showAppIcon: context.largerThanMobile ? true : false,
-      ),
       body: _HomeScreenBody(currencyFormatter: currencyFormatter!),
-      floatingActionButton:
-          context.largerThanMobile ? null : const _FloatingActionButton(),
     );
   }
 }
@@ -131,30 +111,4 @@ class _HomeScreenBody extends ConsumerWidget {
       return formattedCurrency;
     }
   }
-}
-
-class _FloatingActionButton extends StatelessWidget {
-  const _FloatingActionButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: primaryColor,
-      onPressed: () {
-        FirebaseAnalytics.instance.logEvent(
-          name: 'add_entry_button_pressed',
-        );
-
-        pushAddEntryScreen(context);
-      },
-      child: Image.asset(Assets.fountainPen, scale: 3.8),
-    );
-  }
-}
-
-void pushAddEntryScreen(BuildContext context) async {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (_) => const AddEntryScreen()),
-  );
 }

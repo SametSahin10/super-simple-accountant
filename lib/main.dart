@@ -8,8 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/firebase_options.dart';
-import 'package:super_simple_accountant/screens/home_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:super_simple_accountant/screens/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: true,
-      home: const HomeScreen(),
+      home: const MainScreen(),
     );
   }
 }
