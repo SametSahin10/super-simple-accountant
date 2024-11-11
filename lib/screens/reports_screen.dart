@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,88 +41,54 @@ class ReportsScreen extends ConsumerWidget {
         title: context.l10n.reports_screen_title,
         showAppIcon: false,
       ),
-      body: DailyBarChart(entries: entries),
+      body: EntriesBarChart(entries: entries),
     );
   }
 }
 
-class DailyBarChart extends ConsumerStatefulWidget {
+class EntriesBarChart extends ConsumerStatefulWidget {
   final List<Entry> entries;
 
-  const DailyBarChart({super.key, required this.entries});
+  const EntriesBarChart({super.key, required this.entries});
 
   @override
-  ConsumerState<DailyBarChart> createState() => _DailyBarChartState();
+  ConsumerState<EntriesBarChart> createState() => _EntriesBarChartState();
 }
 
-class _DailyBarChartState extends ConsumerState<DailyBarChart> {
+class _EntriesBarChartState extends ConsumerState<EntriesBarChart> {
   ChartGrouping _grouping = ChartGrouping.daily;
 
   @override
   Widget build(BuildContext context) {
-    final groupedEntries = _groupEntries();
-    final currencyFormatter = ref.watch(currencyFormatterProvider);
+    try {
+      final groupedEntries = _groupEntries();
+      final currencyFormatter = ref.watch(currencyFormatterProvider);
 
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Center(
-              child: Container(
-                height: context.height * 0.5,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: BarChart(
-                  swapAnimationDuration: const Duration(milliseconds: 400),
-                  BarChartData(
-                    gridData: const FlGridData(show: false),
-                    borderData: FlBorderData(show: false),
-                    barTouchData:
-                        _buildBarTouchData(context, currencyFormatter!),
-                    titlesData: _buildTitlesData(),
-                    barGroups: _buildBarGroups(context, groupedEntries),
-                  ),
-                ),
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: _ChartContainer(
+                groupedEntries: groupedEntries,
+                currencyFormatter: currencyFormatter!,
+                grouping: _grouping,
               ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildGroupingButton(
-                ChartGrouping.daily,
-                context.l10n.reports_screen_grouping_daily,
-              ),
-              _buildGroupingButton(
-                ChartGrouping.weekly,
-                context.l10n.reports_screen_grouping_weekly,
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGroupingButton(ChartGrouping grouping, String label) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        elevation: 0,
-        backgroundColor: _grouping == grouping
-            ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).colorScheme.surface,
-      ),
-      onPressed: () => setState(() => _grouping = grouping),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: _grouping == grouping
-              ? Theme.of(context).colorScheme.onPrimary
-              : Theme.of(context).colorScheme.onSurface,
+            _GroupingButtons(
+              currentGrouping: _grouping,
+              onGroupingChanged: (grouping) {
+                setState(() => _grouping = grouping);
+              },
+            ),
+            const SizedBox(height: 24),
+          ],
         ),
-      ),
-    );
+      );
+    } catch (error, stackTrace) {
+      FirebaseCrashlytics.instance.recordError(error, stackTrace);
+      return const Center(child: Text('Error loading chart'));
+    }
   }
 
   Map<int, double> _groupEntries() {
@@ -168,14 +135,48 @@ class _DailyBarChartState extends ConsumerState<DailyBarChart> {
       return map;
     });
   }
+}
 
-  BarTouchData _buildBarTouchData(
-    BuildContext context,
-    NumberFormat currencyFormatter,
-  ) {
+class _ChartContainer extends StatelessWidget {
+  final Map<int, double> groupedEntries;
+  final NumberFormat currencyFormatter;
+  final ChartGrouping grouping;
+
+  const _ChartContainer({
+    required this.groupedEntries,
+    required this.currencyFormatter,
+    required this.grouping,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        height: context.height * 0.5,
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: BarChart(
+          swapAnimationDuration: const Duration(milliseconds: 400),
+          BarChartData(
+            gridData: FlGridData(
+              show: true,
+              drawVerticalLine: false,
+              checkToShowHorizontalLine: (value) => value == 0,
+            ),
+            borderData: FlBorderData(show: false),
+            barTouchData: _buildBarTouchData(context),
+            titlesData: _buildTitlesData(context),
+            barGroups: _buildBarGroups(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  BarTouchData _buildBarTouchData(BuildContext context) {
     return BarTouchData(
       touchTooltipData: BarTouchTooltipData(
         tooltipPadding: EdgeInsets.zero,
+        tooltipMargin: 2,
         getTooltipColor: (_) => Colors.transparent,
         getTooltipItem: (group, groupIndex, rod, rodIndex) {
           final amount = rod.toY;
@@ -193,9 +194,9 @@ class _DailyBarChartState extends ConsumerState<DailyBarChart> {
     );
   }
 
-  FlTitlesData _buildTitlesData() {
+  FlTitlesData _buildTitlesData(BuildContext context) {
     List<String> labels;
-    switch (_grouping) {
+    switch (grouping) {
       case ChartGrouping.daily:
         labels = [
           context.l10n.day_of_week_monday,
@@ -236,21 +237,34 @@ class _DailyBarChartState extends ConsumerState<DailyBarChart> {
         sideTitles: SideTitles(showTitles: false),
       ),
       bottomTitles: AxisTitles(
+        drawBelowEverything: true,
         sideTitles: SideTitles(
           showTitles: true,
+          reservedSize: 42,
           getTitlesWidget: (value, meta) {
             final index = value.toInt();
-            return Text(labels[index]);
+            final indexOutOfBounds = index < 0 || index >= labels.length;
+
+            if (indexOutOfBounds) {
+              FirebaseCrashlytics.instance.recordError(
+                'Index out of bounds while rendering '
+                'bottom titles: $index. Meta: ${meta.toString()}',
+                StackTrace.current,
+              );
+            }
+
+            return SideTitleWidget(
+              axisSide: meta.axisSide,
+              space: 18,
+              child: Text(indexOutOfBounds ? '' : labels[index]),
+            );
           },
         ),
       ),
     );
   }
 
-  List<BarChartGroupData> _buildBarGroups(
-    BuildContext context,
-    Map<int, double> groupedEntries,
-  ) {
+  List<BarChartGroupData> _buildBarGroups(BuildContext context) {
     return groupedEntries.entries.map((e) {
       return BarChartGroupData(
         x: e.key - 1,
@@ -265,5 +279,71 @@ class _DailyBarChartState extends ConsumerState<DailyBarChart> {
         ],
       );
     }).toList();
+  }
+}
+
+class _GroupingButtons extends StatelessWidget {
+  final ChartGrouping currentGrouping;
+  final ValueChanged<ChartGrouping> onGroupingChanged;
+
+  const _GroupingButtons({
+    required this.currentGrouping,
+    required this.onGroupingChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _GroupingButton(
+          grouping: ChartGrouping.daily,
+          label: context.l10n.reports_screen_grouping_daily,
+          isSelected: currentGrouping == ChartGrouping.daily,
+          onPressed: onGroupingChanged,
+        ),
+        _GroupingButton(
+          grouping: ChartGrouping.weekly,
+          label: context.l10n.reports_screen_grouping_weekly,
+          isSelected: currentGrouping == ChartGrouping.weekly,
+          onPressed: onGroupingChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _GroupingButton extends StatelessWidget {
+  final ChartGrouping grouping;
+  final String label;
+  final bool isSelected;
+  final ValueChanged<ChartGrouping> onPressed;
+
+  const _GroupingButton({
+    required this.grouping,
+    required this.label,
+    required this.isSelected,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: isSelected
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.surface,
+      ),
+      onPressed: () => onPressed(grouping),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: isSelected
+              ? Theme.of(context).colorScheme.onPrimary
+              : Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+    );
   }
 }
