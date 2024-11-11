@@ -23,7 +23,7 @@ dependencies:
   firebase_core: ^3.2.0
   firebase_crashlytics: ^4.0.3
   firebase_analytics: ^11.2.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
   firebase_messaging: ^15.0.3
   in_app_review: ^2.0.9
   flutter_localizations:
@@ -41,11 +41,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^5.0.0
   json_serializable: ^6.8.0
   build_runner: ^2.4.11
   riverpod_generator: ^2.4.3
-  custom_lint: ^0.6.5
+  custom_lint: ^0.7.0
   riverpod_lint: ^2.3.13
 
 flutter_launcher_icons:

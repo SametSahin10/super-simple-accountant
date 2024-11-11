@@ -23,8 +23,12 @@ mixin _$EntriesStateModel {
   List<Entry> get entries => throw _privateConstructorUsedError;
   WidgetState get widgetState => throw _privateConstructorUsedError;
 
+  /// Serializes this EntriesStateModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EntriesStateModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EntriesStateModelCopyWith<EntriesStateModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$EntriesStateModelCopyWithImpl<$Res, $Val extends EntriesStateModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of EntriesStateModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$EntriesStateModelImplCopyWithImpl<$Res>
       $Res Function(_$EntriesStateModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EntriesStateModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -141,12 +149,14 @@ class _$EntriesStateModelImpl implements _EntriesStateModel {
                 other.widgetState == widgetState));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_entries), widgetState);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EntriesStateModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EntriesStateModelImplCopyWith<_$EntriesStateModelImpl> get copyWith =>
@@ -173,8 +183,11 @@ abstract class _EntriesStateModel implements EntriesStateModel {
   List<Entry> get entries;
   @override
   WidgetState get widgetState;
+
+  /// Create a copy of EntriesStateModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EntriesStateModelImplCopyWith<_$EntriesStateModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -25,8 +25,12 @@ mixin _$Entry {
   String? get description => throw _privateConstructorUsedError;
   Category? get category => throw _privateConstructorUsedError;
 
+  /// Serializes this Entry to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Entry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EntryCopyWith<Entry> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -54,6 +58,8 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Entry
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -82,6 +88,8 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
     ) as $Val);
   }
 
+  /// Create a copy of Entry
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CategoryCopyWith<$Res>? get category {
@@ -120,6 +128,8 @@ class __$$EntryImplCopyWithImpl<$Res>
       _$EntryImpl _value, $Res Function(_$EntryImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Entry
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -189,12 +199,14 @@ class _$EntryImpl implements _Entry {
                 other.category == category));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, amount, createdAt, description, category);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Entry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EntryImplCopyWith<_$EntryImpl> get copyWith =>
@@ -225,8 +237,11 @@ abstract class _Entry implements Entry {
   String? get description;
   @override
   Category? get category;
+
+  /// Create a copy of Entry
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EntryImplCopyWith<_$EntryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

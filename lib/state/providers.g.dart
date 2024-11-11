@@ -6,7 +6,7 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currencyFormatterHash() => r'3895279cf24ede2686a93008449958359191b6d6';
+String _$currencyFormatterHash() => r'6d0a7486ae60b554bcf76cce564cdba3ea1d3020';
 
 /// See also [currencyFormatter].
 @ProviderFor(currencyFormatter)
@@ -16,13 +16,15 @@ final currencyFormatterProvider = AutoDisposeProvider<NumberFormat?>.internal(
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : _$currencyFormatterHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
+  dependencies: const <ProviderOrFamily>[],
+  allTransitiveDependencies: const <ProviderOrFamily>{},
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CurrencyFormatterRef = AutoDisposeProviderRef<NumberFormat?>;
 String _$addEntryScreenModelHash() =>
-    r'bcf3abb7532b71edab9676d04f027ce9e3262095';
+    r'e143cd6459b16e772dfe7a6e18620af2af5ab9d9';
 
 /// See also [addEntryScreenModel].
 @ProviderFor(addEntryScreenModel)
@@ -37,6 +39,8 @@ final addEntryScreenModelProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AddEntryScreenModelRef = AutoDisposeProviderRef<AddEntryScreenModel>;
 String _$selectedCategoryNotifierHash() =>
     r'54eb168307fe5e94caf7c0e950e51e6341e090ae';
@@ -56,4 +60,4 @@ final selectedCategoryNotifierProvider =
 
 typedef _$SelectedCategoryNotifier = AutoDisposeNotifier<Category?>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
