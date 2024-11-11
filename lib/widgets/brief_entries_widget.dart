@@ -1,7 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/screens/all_entries_screen.dart';
@@ -9,9 +8,7 @@ import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/widgets/entry_list_tile.dart';
 
 class BriefEntriesWidget extends ConsumerWidget {
-  final NumberFormat currencyFormatter;
-
-  const BriefEntriesWidget({super.key, required this.currencyFormatter});
+  const BriefEntriesWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,9 +28,7 @@ class BriefEntriesWidget extends ConsumerWidget {
     final showShowMoreWidget = allEntries.length > 3;
     final entryListTiles = entries.map(_toEntryListTile).toList();
 
-    final showMoreWidget = _ShowMoreWidget(
-      currencyFormatter: currencyFormatter,
-    );
+    const showMoreWidget = _ShowMoreWidget();
 
     return Column(
       children: [...entryListTiles, if (showShowMoreWidget) showMoreWidget],
@@ -41,14 +36,12 @@ class BriefEntriesWidget extends ConsumerWidget {
   }
 
   EntryListTile _toEntryListTile(entry) {
-    return EntryListTile(entry: entry, currencyFormatter: currencyFormatter);
+    return EntryListTile(entry: entry);
   }
 }
 
 class _ShowMoreWidget extends StatelessWidget {
-  final NumberFormat currencyFormatter;
-
-  const _ShowMoreWidget({required this.currencyFormatter});
+  const _ShowMoreWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +54,7 @@ class _ShowMoreWidget extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) {
-              return AllEntriesScreen(
-                currencyFormatter: currencyFormatter,
-              );
-            },
+            builder: (_) => const AllEntriesScreen(),
           ),
         );
       },

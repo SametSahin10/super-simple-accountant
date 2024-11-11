@@ -6,6 +6,21 @@ part of 'providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$currencyFormatterHash() => r'3895279cf24ede2686a93008449958359191b6d6';
+
+/// See also [currencyFormatter].
+@ProviderFor(currencyFormatter)
+final currencyFormatterProvider = AutoDisposeProvider<NumberFormat?>.internal(
+  currencyFormatter,
+  name: r'currencyFormatterProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$currencyFormatterHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef CurrencyFormatterRef = AutoDisposeProviderRef<NumberFormat?>;
 String _$addEntryScreenModelHash() =>
     r'bcf3abb7532b71edab9676d04f027ce9e3262095';
 

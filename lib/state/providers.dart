@@ -1,8 +1,12 @@
+import 'package:intl/intl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_simple_accountant/models/add_entry_screen_model.dart';
 import 'package:super_simple_accountant/models/category.dart';
 
 part 'providers.g.dart';
+
+@riverpod
+NumberFormat? currencyFormatter(CurrencyFormatterRef ref) => null;
 
 @riverpod
 AddEntryScreenModel addEntryScreenModel(AddEntryScreenModelRef ref) {

@@ -7,7 +7,7 @@ part of 'entries_state_notifier.dart';
 // **************************************************************************
 
 String _$entriesStateNotifierHash() =>
-    r'24f9399755afbcf090a3618aba0aceaeee26b8e7';
+    r'0f028fee279725321adaa2c8ea98e7bdc9eb245f';
 
 /// See also [EntriesStateNotifier].
 @ProviderFor(EntriesStateNotifier)

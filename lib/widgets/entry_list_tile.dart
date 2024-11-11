@@ -1,22 +1,17 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
+import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/utility_functions.dart';
 import 'package:super_simple_accountant/widgets/entry_details_bottom_sheet.dart';
 
 class EntryListTile extends ConsumerWidget {
   final Entry entry;
-  final NumberFormat currencyFormatter;
 
-  const EntryListTile({
-    super.key,
-    required this.entry,
-    required this.currencyFormatter,
-  });
+  const EntryListTile({super.key, required this.entry});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,8 +23,10 @@ class EntryListTile extends ConsumerWidget {
 
     final amountPrefixSign = entry.amount.isNegative ? "" : "+";
 
+    final currencyFormatter = ref.watch(currencyFormatterProvider);
+
     final amountText =
-        amountPrefixSign + currencyFormatter.format(entry.amount);
+        amountPrefixSign + currencyFormatter!.format(entry.amount);
 
     final fontSize = context.largerThanMobile ? 24.0 : 16.0;
 

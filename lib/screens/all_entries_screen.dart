@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/controllers/export_entries_controller.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
+import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/entry_list_tile.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
 
 class AllEntriesScreen extends ConsumerWidget {
-  final NumberFormat currencyFormatter;
-
-  const AllEntriesScreen({
-    super.key,
-    required this.currencyFormatter,
-  });
+  const AllEntriesScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,14 +22,17 @@ class AllEntriesScreen extends ConsumerWidget {
       return second.createdAt.compareTo(first.createdAt);
     });
 
+    final currencyFormatter = ref.watch(currencyFormatterProvider);
+
     return Scaffold(
       appBar: ResponsiveAppBar(
         context: context,
         title: context.l10n.allEntries,
         showMenu: true,
         onExport: () {
-          final exportEntriesController =
-              ExportEntriesController(currencyFormatter: currencyFormatter);
+          final exportEntriesController = ExportEntriesController(
+            currencyFormatter: currencyFormatter!,
+          );
 
           exportEntriesController.onExport(context, copyOfAllEntries);
         },
@@ -51,7 +49,5 @@ class AllEntriesScreen extends ConsumerWidget {
     );
   }
 
-  EntryListTile _toEntryListTile(entry) {
-    return EntryListTile(entry: entry, currencyFormatter: currencyFormatter);
-  }
+  EntryListTile _toEntryListTile(entry) => EntryListTile(entry: entry);
 }
