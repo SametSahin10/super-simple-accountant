@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart' hide WidgetState;
@@ -84,6 +85,11 @@ class _EntriesBarChartState extends ConsumerState<EntriesBarChart> {
           _GroupingButtons(
             currentGrouping: _grouping,
             onGroupingChanged: (grouping) {
+              FirebaseAnalytics.instance.logEvent(
+                name: "reports_screen_grouping_changed",
+                parameters: {"grouping": grouping.name},
+              );
+
               setState(() => _grouping = grouping);
             },
           ),

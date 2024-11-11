@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -33,11 +34,7 @@ class _MainScreenState extends State<MainScreen> {
       body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+        onTap: _onBottomNavBarItemTap,
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.home),
@@ -53,6 +50,37 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _onBottomNavBarItemTap(index) {
+    _logBottomNavBarItemTap(index);
+
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  void _logBottomNavBarItemTap(index) {
+    String bottomTabName;
+
+    switch (index) {
+      case 0:
+        bottomTabName = "home";
+        break;
+      case 1:
+        bottomTabName = "reports";
+        break;
+      case 2:
+        bottomTabName = "about";
+        break;
+      default:
+        bottomTabName = "unknown";
+    }
+
+    FirebaseAnalytics.instance.logEvent(
+      name: "bottom_navigation_bar_item_tapped",
+      parameters: {"bottom_tab_name": bottomTabName},
     );
   }
 }

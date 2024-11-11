@@ -65,6 +65,9 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: true,
       home: const MainScreen(),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      ],
       builder: (context, child) => _Builder(child: child!),
     );
   }

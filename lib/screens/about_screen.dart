@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -51,25 +52,35 @@ class AboutScreen extends StatelessWidget {
                 leading: const Icon(Icons.flutter_dash),
                 title: Text(context.l10n.twitter_title),
                 subtitle: Text(context.l10n.twitter_handle),
-                onTap: () => launchUrl(
-                  Uri.parse('https://twitter.com/accountantapp'),
-                ),
+                onTap: () {
+                  FirebaseAnalytics.instance.logEvent(
+                    name: 'about_screen_twitter_tapped',
+                  );
+                  launchUrl(Uri.parse('https://twitter.com/accountantapp'));
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.photo_camera),
                 title: Text(context.l10n.instagram_title),
                 subtitle: Text(context.l10n.instagram_handle),
-                onTap: () => launchUrl(
-                  Uri.parse('https://instagram.com/supersimpleaccountant'),
-                ),
+                onTap: () {
+                  FirebaseAnalytics.instance.logEvent(
+                    name: 'about_screen_instagram_tapped',
+                  );
+                  launchUrl(
+                      Uri.parse('https://instagram.com/supersimpleaccountant'));
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.email),
                 title: Text(context.l10n.contact_title),
                 subtitle: Text(context.l10n.contact_subtitle),
-                onTap: () => launchUrl(
-                  Uri.parse('mailto:supersimpleacc10@gmail.com'),
-                ),
+                onTap: () {
+                  FirebaseAnalytics.instance.logEvent(
+                    name: 'about_screen_email_tapped',
+                  );
+                  launchUrl(Uri.parse('mailto:supersimpleacc10@gmail.com'));
+                },
               ),
               const SizedBox(height: 24),
               Text(
@@ -77,10 +88,12 @@ class AboutScreen extends StatelessWidget {
                 style: const TextStyle(color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
-              // simpleaccountat.app
               const SizedBox(height: 4),
               GestureDetector(
                 onTap: () {
+                  FirebaseAnalytics.instance.logEvent(
+                    name: 'about_screen_website_tapped',
+                  );
                   launchUrl(Uri.parse('https://simpleaccountant.app'));
                 },
                 child: const Text(
