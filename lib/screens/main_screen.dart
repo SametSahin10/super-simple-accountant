@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:super_simple_accountant/screens/about_screen.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
 import 'package:super_simple_accountant/screens/reports_screen.dart';
 import 'package:super_simple_accountant/state/providers.dart';
@@ -38,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
     final screens = [
       const HomeScreen(),
       const ReportsScreen(),
-      const Center(child: Text('Coming Soon')),
+      const AboutScreen(),
     ];
 
     return ProviderScope(
