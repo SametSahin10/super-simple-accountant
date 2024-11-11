@@ -3,11 +3,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:super_simple_accountant/constants.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/state/providers.dart';
+import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
 
 enum ChartGrouping { daily, weekly, monthly }
@@ -41,7 +43,12 @@ class ReportsScreen extends ConsumerWidget {
         title: context.l10n.reports_screen_title,
         showAppIcon: false,
       ),
-      body: EntriesBarChart(entries: entries),
+      body: Column(
+        children: [
+          const BannerAdWidget(adUnitId: reportsScreenBannerAdId),
+          Expanded(child: EntriesBarChart(entries: entries)),
+        ],
+      ),
     );
   }
 }
@@ -64,26 +71,24 @@ class _EntriesBarChartState extends ConsumerState<EntriesBarChart> {
       final groupedEntries = _groupEntries();
       final currencyFormatter = ref.watch(currencyFormatterProvider);
 
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: _ChartContainer(
-                groupedEntries: groupedEntries,
-                currencyFormatter: currencyFormatter!,
-                grouping: _grouping,
-              ),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: _ChartContainer(
+              groupedEntries: groupedEntries,
+              currencyFormatter: currencyFormatter!,
+              grouping: _grouping,
             ),
-            _GroupingButtons(
-              currentGrouping: _grouping,
-              onGroupingChanged: (grouping) {
-                setState(() => _grouping = grouping);
-              },
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
+          ),
+          _GroupingButtons(
+            currentGrouping: _grouping,
+            onGroupingChanged: (grouping) {
+              setState(() => _grouping = grouping);
+            },
+          ),
+          const SizedBox(height: 24),
+        ],
       );
     } catch (error, stackTrace) {
       FirebaseCrashlytics.instance.recordError(error, stackTrace);
