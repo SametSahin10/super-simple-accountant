@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/screens/about_screen.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
 import 'package:super_simple_accountant/screens/reports_screen.dart';
@@ -55,18 +56,18 @@ class _MainScreenState extends State<MainScreen> {
               _selectedIndex = index;
             });
           },
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+              icon: const Icon(Icons.home),
+              label: context.l10n.home_bottom_navigation_label,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart),
-              label: 'Reports',
+              icon: const Icon(Icons.bar_chart),
+              label: context.l10n.reports_bottom_navigation_label,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Me',
+              icon: const Icon(Icons.info),
+              label: context.l10n.about_bottom_navigation_label,
             ),
           ],
         ),

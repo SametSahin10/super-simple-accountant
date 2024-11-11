@@ -22,25 +22,22 @@ class ReportsScreen extends ConsumerWidget {
       return const CircularProgressIndicator();
     }
 
-    // final entries = entriesStateModel.entries;
+    final entries = entriesStateModel.entries;
 
-    // if (entries.isEmpty) {
-    //   return const Center(child: Text('No entries found'));
-    // }
-
-    final entries = [
-      Entry(amount: 100, createdAt: DateTime(2024, 06, 11)),
-      Entry(amount: 300, createdAt: DateTime(2024, 07, 11)),
-      Entry(amount: 200, createdAt: DateTime(2024, 08, 12)),
-      Entry(amount: -300, createdAt: DateTime(2024, 11, 13)),
-      Entry(amount: 400, createdAt: DateTime(2024, 11, 14)),
-      Entry(amount: 500, createdAt: DateTime(2024, 11, 15)),
-    ];
+    if (entries.isEmpty) {
+      // TODO: Show a nice animation here.
+      return Center(
+        child: Text(
+          context.l10n.no_entries_found,
+          style: const TextStyle(fontSize: 16),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: ResponsiveAppBar(
         context: context,
-        title: "Reports",
+        title: context.l10n.reports_screen_title,
         showAppIcon: false,
       ),
       body: DailyBarChart(entries: entries),
@@ -75,6 +72,7 @@ class _DailyBarChartState extends ConsumerState<DailyBarChart> {
                 height: context.height * 0.5,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: BarChart(
+                  swapAnimationDuration: const Duration(milliseconds: 400),
                   BarChartData(
                     gridData: const FlGridData(show: false),
                     borderData: FlBorderData(show: false),
@@ -90,8 +88,14 @@ class _DailyBarChartState extends ConsumerState<DailyBarChart> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildGroupingButton(ChartGrouping.daily, 'Daily'),
-              _buildGroupingButton(ChartGrouping.weekly, 'Weekly'),
+              _buildGroupingButton(
+                ChartGrouping.daily,
+                context.l10n.reports_screen_grouping_daily,
+              ),
+              _buildGroupingButton(
+                ChartGrouping.weekly,
+                context.l10n.reports_screen_grouping_weekly,
+              ),
             ],
           ),
           const SizedBox(height: 24),
@@ -193,10 +197,24 @@ class _DailyBarChartState extends ConsumerState<DailyBarChart> {
     List<String> labels;
     switch (_grouping) {
       case ChartGrouping.daily:
-        labels = const ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        labels = [
+          context.l10n.day_of_week_monday,
+          context.l10n.day_of_week_tuesday,
+          context.l10n.day_of_week_wednesday,
+          context.l10n.day_of_week_thursday,
+          context.l10n.day_of_week_friday,
+          context.l10n.day_of_week_saturday,
+          context.l10n.day_of_week_sunday,
+        ];
         break;
       case ChartGrouping.weekly:
-        labels = const ["Week 1", "Week 2", "Week 3", "Week 4"];
+        final l10n = context.l10n;
+        labels = [
+          '${l10n.reports_bottom_label_week} 1',
+          '${l10n.reports_bottom_label_week} 2',
+          '${l10n.reports_bottom_label_week} 3',
+          '${l10n.reports_bottom_label_week} 4',
+        ];
         break;
       case ChartGrouping.monthly:
         final now = DateTime.now();
