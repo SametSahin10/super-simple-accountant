@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:super_simple_accountant/currency_formatter.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/services/pdf_creator_service.dart';
 import 'package:universal_html/html.dart' as html;
 
 class ExportEntriesController {
-  final NumberFormat currencyFormatter;
+  final CurrencyFormatter currencyFormatter;
 
   const ExportEntriesController({required this.currencyFormatter});
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/constants.dart';
+import 'package:super_simple_accountant/currency_formatter.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
@@ -150,7 +151,7 @@ class _EntriesBarChartState extends ConsumerState<EntriesBarChart> {
 
 class _ChartContainer extends StatelessWidget {
   final Map<int, double> groupedEntries;
-  final NumberFormat currencyFormatter;
+  final CurrencyFormatter currencyFormatter;
   final ChartGrouping grouping;
 
   const _ChartContainer({

@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/colors.dart';
+import 'package:super_simple_accountant/currency_formatter.dart';
 import 'package:super_simple_accountant/firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:super_simple_accountant/screens/main_screen.dart';
@@ -83,15 +84,19 @@ class _Builder extends StatefulWidget {
 }
 
 class _BuilderState extends State<_Builder> {
-  NumberFormat? currencyFormatter;
+  CurrencyFormatter? currencyFormatter;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final locale = Localizations.localeOf(context);
 
-    currencyFormatter ??=
-        NumberFormat.simpleCurrency(locale: locale.toString());
+    final numberFormat = NumberFormat.simpleCurrency(locale: locale.toString());
+
+    currencyFormatter = CurrencyFormatter(
+      locale: locale,
+      currencyFormatter: numberFormat,
+    );
   }
 
   @override

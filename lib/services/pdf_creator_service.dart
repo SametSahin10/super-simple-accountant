@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:super_simple_accountant/currency_formatter.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:pdf/pdf.dart';
@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class PdfCreatorService {
-  final NumberFormat currencyFormatter;
+  final CurrencyFormatter currencyFormatter;
 
   const PdfCreatorService({required this.currencyFormatter});
 
@@ -21,7 +21,11 @@ class PdfCreatorService {
     final appIcon = kIsWeb ? null : await _loadAppIcon();
 
     final netAmount = entries.fold(0.0, (sum, entry) => sum + entry.amount);
-    final formattedCurrency = currencyFormatter.format(netAmount);
+
+    final formattedCurrency = currencyFormatter.format(
+      netAmount,
+      replaceTurkishCurrencySymbol: false,
+    );
 
     pdf.addPage(
       pw.Page(
@@ -160,8 +164,13 @@ class PdfCreatorService {
 
   pw.Widget _buildEntryAmount(Entry entry) {
     final amountPrefixSign = entry.amount.isNegative ? "" : "+";
-    final amountText =
-        amountPrefixSign + currencyFormatter.format(entry.amount);
+
+    final formattedCurrency = currencyFormatter.format(
+      entry.amount,
+      replaceTurkishCurrencySymbol: false,
+    );
+
+    final amountText = amountPrefixSign + formattedCurrency;
 
     return pw.Text(
       amountText,

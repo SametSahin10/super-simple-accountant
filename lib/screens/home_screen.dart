@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/constants.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -52,12 +51,7 @@ class _HomeScreenBody extends ConsumerWidget {
     final netAmount = entriesStateNotifier.getNetAmount();
 
     final currencyFormatter = ref.watch(currencyFormatterProvider);
-
-    final formattedCurrency = _getFormattedCurrency(
-      context: context,
-      netAmount: netAmount,
-      currencyFormatter: currencyFormatter!,
-    );
+    final formattedCurrency = currencyFormatter!.format(netAmount);
 
     return Center(
       child: SizedBox(
@@ -98,23 +92,5 @@ class _HomeScreenBody extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  String _getFormattedCurrency({
-    required BuildContext context,
-    required double netAmount,
-    required NumberFormat currencyFormatter,
-  }) {
-    final formattedCurrency = currencyFormatter.format(netAmount);
-    final local = Localizations.localeOf(context);
-
-    final currencyIsTL = formattedCurrency.contains("TL");
-    final replaceCurrencySymbol = local.languageCode == "tr" && currencyIsTL;
-
-    if (replaceCurrencySymbol) {
-      return formattedCurrency.replaceFirst("TL", "₺");
-    } else {
-      return formattedCurrency;
-    }
   }
 }

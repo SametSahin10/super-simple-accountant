@@ -24,7 +24,7 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: context.largerThanMobile ? 120 : null,
       title: Padding(
-        padding: const EdgeInsets.only(top: 12),
+        padding: const EdgeInsets.only(top: 8),
         child: Builder(
           builder: (context) {
             if (showAppIcon) return _TitleWithAppIcon(title: title);
