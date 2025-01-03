@@ -34,7 +34,7 @@
   "reports_bottom_label_week": "Hafta",
   "reports_screen_title": "Raporlar",
   "about_screen_title": "Hakkında",
-  "no_entries_found": "Kayıt bulunamadı.",
+  "no_entries_found": "Kayıt bulunamadı.\nİlk kaydını eklemeye hazır mısın?",
 
   "reports_screen_grouping_daily": "Günlük",
   "reports_screen_grouping_weekly": "Haftalık",

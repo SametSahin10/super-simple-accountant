@@ -15,6 +15,7 @@ import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
+import 'package:lottie/lottie.dart';
 
 enum ChartGrouping { daily, weekly, monthly }
 
@@ -32,11 +33,24 @@ class ReportsScreen extends ConsumerWidget {
     final entries = entriesStateModel.entries;
 
     if (entries.isEmpty) {
-      // TODO: Show a nice animation here.
       return Center(
-        child: Text(
-          context.l10n.no_entries_found,
-          style: const TextStyle(fontSize: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              'assets/animations/sleeping_cat.json',
+              width: context.width * 0.8,
+            ),
+            const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                context.l10n.no_entries_found,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18),
+              ),
+            ),
+          ],
         ),
       );
     }
