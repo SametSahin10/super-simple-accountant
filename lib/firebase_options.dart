@@ -23,10 +23,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -65,6 +62,15 @@ class DefaultFirebaseOptions {
     authDomain: 'super-simple-accountant.firebaseapp.com',
     storageBucket: 'super-simple-accountant.appspot.com',
     measurementId: 'G-50T2BYMJ7F',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCBlSjtlBkBmfvWUefiApC7jXiAFIZPUqc',
+    appId: '1:955905474794:ios:6a548d6da1bb105e4c1793',
+    messagingSenderId: '955905474794',
+    projectId: 'super-simple-accountant',
+    storageBucket: 'super-simple-accountant.appspot.com',
+    iosBundleId: 'app.simpleaccountant.ios',
   );
 
 }
