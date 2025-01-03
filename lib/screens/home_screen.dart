@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:super_simple_accountant/constants.dart';
+import 'package:super_simple_accountant/admob_config.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
@@ -59,7 +59,9 @@ class _HomeScreenBody extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const BannerAdWidget(adUnitId: homeScreenBannerAdId),
+            BannerAdWidget(
+              adUnitId: getAdUnitId(AdUnit.homeScreenBanner),
+            ),
             Expanded(
               child: Column(
                 mainAxisAlignment: context.largerThanMobile

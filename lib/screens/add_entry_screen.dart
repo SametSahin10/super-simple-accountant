@@ -2,8 +2,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:super_simple_accountant/admob_config.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/constants.dart';
+import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/category.dart';
 import 'package:super_simple_accountant/models/entry.dart';
@@ -40,7 +42,9 @@ class AddEntryScreen extends ConsumerWidget {
                   : context.width,
               child: ListView(
                 children: [
-                  const BannerAdWidget(adUnitId: addEntryScreenBannerAdId),
+                  BannerAdWidget(
+                    adUnitId: getAdUnitId(AdUnit.addEntryScreenBanner),
+                  ),
                   const SizedBox(height: 70),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

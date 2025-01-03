@@ -6,7 +6,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:super_simple_accountant/constants.dart';
+import 'package:super_simple_accountant/admob_config.dart';
 import 'package:super_simple_accountant/currency_formatter.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -63,7 +63,9 @@ class ReportsScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          const BannerAdWidget(adUnitId: reportsScreenBannerAdId),
+          BannerAdWidget(
+            adUnitId: getAdUnitId(AdUnit.reportsScreenBanner),
+          ),
           Expanded(child: EntriesBarChart(entries: entries)),
         ],
       ),
