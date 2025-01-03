@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -103,7 +105,7 @@ class _EntriesBarChartState extends ConsumerState<EntriesBarChart> {
     }
   }
 
-  Map<int, double> _groupEntries() {
+  Map<DateTime, double> _groupEntries() {
     switch (_grouping) {
       case ChartGrouping.daily:
         return _groupEntriesByDay();
@@ -114,43 +116,49 @@ class _EntriesBarChartState extends ConsumerState<EntriesBarChart> {
     }
   }
 
-  Map<int, double> _groupEntriesByDay() {
-    return widget.entries.fold<Map<int, double>>(
-        {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}, (map, entry) {
-      final dayOfWeek = entry.createdAt.weekday;
-      map[dayOfWeek] = (map[dayOfWeek] ?? 0) + entry.amount;
-      return map;
-    });
+  Map<DateTime, double> _groupEntriesByDay() {
+    final groupedByDay = <DateTime, double>{};
+
+    for (var entry in widget.entries) {
+      final day = DateTime(
+        entry.createdAt.year,
+        entry.createdAt.month,
+        entry.createdAt.day,
+      );
+      groupedByDay[day] = (groupedByDay[day] ?? 0) + entry.amount;
+    }
+
+    return groupedByDay;
   }
 
-  Map<int, double> _groupEntriesByWeek() {
-    return widget.entries.fold<Map<int, double>>({1: 0, 2: 0, 3: 0, 4: 0},
-        (map, entry) {
-      final weekOfMonth = (entry.createdAt.day / 7).ceil();
-      map[weekOfMonth] = (map[weekOfMonth] ?? 0) + entry.amount;
-      return map;
-    });
+  Map<DateTime, double> _groupEntriesByWeek() {
+    final groupedByWeek = <DateTime, double>{};
+
+    for (var entry in widget.entries) {
+      // Get start of the week (Monday)
+      final weekStart =
+          entry.createdAt.subtract(Duration(days: entry.createdAt.weekday - 1));
+      final week = DateTime(weekStart.year, weekStart.month, weekStart.day);
+      groupedByWeek[week] = (groupedByWeek[week] ?? 0) + entry.amount;
+    }
+
+    return groupedByWeek;
   }
 
-  Map<int, double> _groupEntriesByMonth() {
-    final now = DateTime.now();
-    final sixMonthsAgo = DateTime(now.year, now.month - 5, 1);
+  Map<DateTime, double> _groupEntriesByMonth() {
+    final groupedByMonth = <DateTime, double>{};
 
-    final initialMap =
-        Map.fromEntries(List.generate(6, (i) => MapEntry(now.month - i, 0.0)));
+    for (var entry in widget.entries) {
+      final month = DateTime(entry.createdAt.year, entry.createdAt.month);
+      groupedByMonth[month] = (groupedByMonth[month] ?? 0) + entry.amount;
+    }
 
-    return widget.entries
-        .where((entry) => entry.createdAt.isAfter(sixMonthsAgo))
-        .fold<Map<int, double>>(initialMap, (map, entry) {
-      final month = entry.createdAt.month;
-      map[month] = (map[month] ?? 0) + entry.amount;
-      return map;
-    });
+    return groupedByMonth;
   }
 }
 
 class _ChartContainer extends StatelessWidget {
-  final Map<int, double> groupedEntries;
+  final Map<DateTime, double> groupedEntries;
   final CurrencyFormatter currencyFormatter;
   final ChartGrouping grouping;
 
@@ -166,18 +174,24 @@ class _ChartContainer extends StatelessWidget {
       child: Container(
         height: context.height * 0.5,
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: BarChart(
-          swapAnimationDuration: const Duration(milliseconds: 400),
-          BarChartData(
-            gridData: FlGridData(
-              show: true,
-              drawVerticalLine: false,
-              checkToShowHorizontalLine: (value) => value == 0,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            width: math.max(context.width, groupedEntries.length * 60.0),
+            child: BarChart(
+              swapAnimationDuration: const Duration(milliseconds: 400),
+              BarChartData(
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  checkToShowHorizontalLine: (value) => value == 0,
+                ),
+                borderData: FlBorderData(show: false),
+                barTouchData: _buildBarTouchData(context),
+                titlesData: _buildTitlesData(context),
+                barGroups: _buildBarGroups(context),
+              ),
             ),
-            borderData: FlBorderData(show: false),
-            barTouchData: _buildBarTouchData(context),
-            titlesData: _buildTitlesData(context),
-            barGroups: _buildBarGroups(context),
           ),
         ),
       ),
@@ -210,31 +224,29 @@ class _ChartContainer extends StatelessWidget {
     List<String> labels;
     switch (grouping) {
       case ChartGrouping.daily:
-        labels = [
-          context.l10n.day_of_week_monday,
-          context.l10n.day_of_week_tuesday,
-          context.l10n.day_of_week_wednesday,
-          context.l10n.day_of_week_thursday,
-          context.l10n.day_of_week_friday,
-          context.l10n.day_of_week_saturday,
-          context.l10n.day_of_week_sunday,
-        ];
+        labels = groupedEntries.keys.map((date) {
+          return DateFormat('E, MMM d').format(date);
+        }).toList();
         break;
+
       case ChartGrouping.weekly:
-        final l10n = context.l10n;
-        labels = [
-          '${l10n.reports_bottom_label_week} 1',
-          '${l10n.reports_bottom_label_week} 2',
-          '${l10n.reports_bottom_label_week} 3',
-          '${l10n.reports_bottom_label_week} 4',
-        ];
+        labels = groupedEntries.keys.map((date) {
+          final weekStart = date;
+          final weekEnd = weekStart.add(const Duration(days: 6));
+          if (weekStart.month == weekEnd.month) {
+            // Same month: "Oct 1-7"
+            return '${DateFormat('MMM d').format(weekStart)}-${DateFormat('d').format(weekEnd)}';
+          } else {
+            // Different months: "Sep 29-Oct 5"
+            return '${DateFormat('MMM d').format(weekStart)}-${DateFormat('MMM d').format(weekEnd)}';
+          }
+        }).toList();
         break;
+
       case ChartGrouping.monthly:
-        final now = DateTime.now();
-        labels = List.generate(6, (i) {
-          final month = DateTime(now.year, now.month - i);
-          return DateFormat('MMM').format(month);
-        }).reversed.toList();
+        labels = groupedEntries.keys.map((date) {
+          return DateFormat('MMM yyyy').format(date);
+        }).toList();
         break;
     }
 
@@ -252,7 +264,7 @@ class _ChartContainer extends StatelessWidget {
         drawBelowEverything: true,
         sideTitles: SideTitles(
           showTitles: true,
-          reservedSize: 42,
+          reservedSize: 60,
           getTitlesWidget: (value, meta) {
             final index = value.toInt();
             final indexOutOfBounds = index < 0 || index >= labels.length;
@@ -265,10 +277,18 @@ class _ChartContainer extends StatelessWidget {
               );
             }
 
+            final rotateLabels = labels.length > 5;
+
             return SideTitleWidget(
               axisSide: meta.axisSide,
-              space: 18,
-              child: Text(indexOutOfBounds ? '' : labels[index]),
+              space: 32,
+              child: Transform.rotate(
+                angle: rotateLabels ? -30 * math.pi / 180 : 0,
+                child: Text(
+                  indexOutOfBounds ? '' : labels[index],
+                  style: TextStyle(fontSize: rotateLabels ? 10 : 12),
+                ),
+              ),
             );
           },
         ),
@@ -279,7 +299,7 @@ class _ChartContainer extends StatelessWidget {
   List<BarChartGroupData> _buildBarGroups(BuildContext context) {
     return groupedEntries.entries.map((e) {
       return BarChartGroupData(
-        x: e.key - 1,
+        x: groupedEntries.keys.toList().indexOf(e.key),
         showingTooltipIndicators: [0],
         barRods: [
           BarChartRodData(
@@ -318,6 +338,12 @@ class _GroupingButtons extends StatelessWidget {
           grouping: ChartGrouping.weekly,
           label: context.l10n.reports_screen_grouping_weekly,
           isSelected: currentGrouping == ChartGrouping.weekly,
+          onPressed: onGroupingChanged,
+        ),
+        _GroupingButton(
+          grouping: ChartGrouping.monthly,
+          label: context.l10n.reports_screen_grouping_monthly,
+          isSelected: currentGrouping == ChartGrouping.monthly,
           onPressed: onGroupingChanged,
         ),
       ],

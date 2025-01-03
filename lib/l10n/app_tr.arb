@@ -35,8 +35,11 @@
   "reports_screen_title": "Raporlar",
   "about_screen_title": "Hakkında",
   "no_entries_found": "Kayıt bulunamadı.",
+
   "reports_screen_grouping_daily": "Günlük",
   "reports_screen_grouping_weekly": "Haftalık",
+  "reports_screen_grouping_monthly": "Aylık",
+  
   "reports_bottom_label_january": "Oca",
   "reports_bottom_label_february": "Şub",
   "reports_bottom_label_march": "Mar",

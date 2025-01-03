@@ -45,8 +45,11 @@
   "reports_bottom_label_december": "Dec",
   "reports_bottom_label_week": "Week",
   "reports_screen_title": "Reports",
+
   "reports_screen_grouping_daily": "Daily",
   "reports_screen_grouping_weekly": "Weekly",
+  "reports_screen_grouping_monthly": "Monthly",
+
   "about_screen_title": "About",
   "no_entries_found": "No entries found.",
   "app_name": "Super Simple Accountant",
