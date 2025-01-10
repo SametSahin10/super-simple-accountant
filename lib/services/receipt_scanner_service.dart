@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:super_simple_accountant/models/receipt/receipt_analysis_result.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -32,7 +33,13 @@ class ReceiptScannerService {
 
       return ReceiptAnalysisResult.fromJson(json);
     } catch (e) {
-      // Handle error
+      FirebaseCrashlytics.instance.recordError(
+        Exception(
+          "Failed to analyze receipt. Error: $e",
+        ),
+        StackTrace.current,
+      );
+
       return null;
     }
   }

@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -62,17 +63,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _handleReceiptScan(BuildContext context) async {
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     final scanner = ReceiptScannerService();
     final image = await scanner.captureReceipt();
 
     if (image == null) return;
-
     if (!context.mounted) return;
 
+    context.showProgressDialog(text: 'Analyzing receipt...');
     final receiptData = await scanner.processReceipt(image);
-    if (receiptData == null) return;
+    navigator.pop();
 
-    if (!context.mounted) return;
+    if (receiptData == null) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(content: Text('Failed to analyze receipt')),
+      );
+
+      return;
+    }
+
+    if (!context.mounted) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text("An error occurred."),
+        ),
+      );
+
+      FirebaseCrashlytics.instance.recordError(
+        Exception(
+          "Receipt has been analyzed but the results cannot be shown "
+          "because the context is not mounted.",
+        ),
+        StackTrace.current,
+      );
+
+      return;
+    }
 
     Navigator.push(
       context,
