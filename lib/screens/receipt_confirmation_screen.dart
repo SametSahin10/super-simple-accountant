@@ -46,22 +46,19 @@ class _ReceiptConfirmationScreenState
     return Scaffold(
       appBar: AppBar(
         title: const Text('Confirm Receipt'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check),
-            onPressed: _saveEntry,
-          ),
-        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Image.file(
-            File(widget.imagePath),
-            height: 200,
-            fit: BoxFit.cover,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: Image.file(
+              File(widget.imagePath),
+              height: 200,
+              fit: BoxFit.cover,
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           TextField(
             controller: _merchantController,
             decoration: const InputDecoration(
@@ -69,7 +66,7 @@ class _ReceiptConfirmationScreenState
               border: OutlineInputBorder(),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           TextField(
             controller: _amountController,
             decoration: const InputDecoration(
@@ -78,13 +75,31 @@ class _ReceiptConfirmationScreenState
             ),
             keyboardType: TextInputType.number,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           CategoryDropdown(
+            initialCategory: widget.receiptAnalysisResult.category,
             onCategorySelected: (selectedCategory) {
               setState(() {
                 _selectedCategory = selectedCategory;
               });
             },
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: _saveEntry,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+            icon: const Icon(Icons.check_circle_rounded),
+            label: Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: const Text(
+                'Confirm',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
           ),
         ],
       ),

@@ -16,10 +16,11 @@ ReceiptAnalysisResult _$ReceiptAnalysisResultFromJson(
           .map((e) => ReceiptItem.fromJson(e as Map<String, dynamic>))
           .toList(),
       total: (json['total'] as num).toDouble(),
+      date: ReceiptAnalysisResult._dateFromJson(json['date']),
+      category: Category.fromJson(json['category'] as Map<String, dynamic>),
     );
 
 ReceiptItem _$ReceiptItemFromJson(Map<String, dynamic> json) => ReceiptItem(
       name: json['name'] as String,
-      category: json['category'] as String,
       price: (json['price'] as num).toDouble(),
     );

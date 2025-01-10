@@ -5,9 +5,14 @@ import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/category.dart';
 
 class CategoryDropdown extends StatefulWidget {
+  final Category? initialCategory;
   final Function(Category) onCategorySelected;
 
-  const CategoryDropdown({super.key, required this.onCategorySelected});
+  const CategoryDropdown({
+    super.key,
+    required this.onCategorySelected,
+    this.initialCategory,
+  });
 
   @override
   State<CategoryDropdown> createState() => _CategoryDropdownState();
@@ -15,6 +20,12 @@ class CategoryDropdown extends StatefulWidget {
 
 class _CategoryDropdownState extends State<CategoryDropdown> {
   Category? _selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCategory = widget.initialCategory;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +36,7 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
           borderRadius: BorderRadius.circular(5.0),
         ),
         child: DropdownButton<Category>(
+          value: _selectedCategory,
           itemHeight: null,
           isExpanded: true,
           icon: const Padding(
@@ -44,7 +56,6 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
               ],
             ),
           ),
-          value: _selectedCategory,
           onChanged: (Category? newValue) {
             setState(() {
               _selectedCategory = newValue;
