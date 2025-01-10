@@ -15,6 +15,7 @@ import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/category_dropdown.dart';
 import 'package:super_simple_accountant/widgets/entry_action_button.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
+import 'package:uuid/uuid.dart';
 
 class AddEntryScreen extends ConsumerWidget {
   const AddEntryScreen({super.key});
@@ -159,6 +160,8 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     String description = descriptionController.text;
 
     final entry = Entry(
+      id: const Uuid().v4(),
+      source: EntrySource.basic(),
       amount: currentAmount.abs(),
       description: description,
       category: selectedCategory,
@@ -199,6 +202,8 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     String description = descriptionController.text;
 
     final entry = Entry(
+      id: const Uuid().v4(),
+      source: EntrySource.basic(),
       amount: -currentAmount.abs(),
       description: description,
       category: selectedCategory,

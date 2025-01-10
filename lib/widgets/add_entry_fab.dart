@@ -9,8 +9,8 @@ class AddEntryFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: primaryColor,
+    return IconButton(
+      color: primaryColor,
       onPressed: () {
         FirebaseAnalytics.instance.logEvent(
           name: 'add_entry_button_pressed',
@@ -18,7 +18,7 @@ class AddEntryFab extends StatelessWidget {
 
         pushAddEntryScreen(context);
       },
-      child: Image.asset(Assets.fountainPen, scale: 3.8),
+      icon: Image.asset(Assets.fountainPen, scale: 3.8),
     );
   }
 }

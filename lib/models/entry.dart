@@ -6,12 +6,28 @@ part 'entry.g.dart';
 
 @freezed
 class Entry with _$Entry {
-  factory Entry({
+  const factory Entry({
+    required String id,
     required double amount,
     required DateTime createdAt,
     String? description,
     Category? category,
+    required EntrySource source,
   }) = _Entry;
 
   factory Entry.fromJson(Map<String, dynamic> json) => _$EntryFromJson(json);
+}
+
+@freezed
+class EntrySource with _$EntrySource {
+  const factory EntrySource.basic() = BasicEntrySource;
+
+  const factory EntrySource.receipt({
+    required String imagePath,
+    required String merchantName,
+    String? rawText,
+  }) = ReceiptEntrySource;
+
+  factory EntrySource.fromJson(Map<String, dynamic> json) =>
+      _$EntrySourceFromJson(json);
 }
