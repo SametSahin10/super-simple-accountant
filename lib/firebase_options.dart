@@ -70,6 +70,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '955905474794',
     projectId: 'super-simple-accountant',
     storageBucket: 'super-simple-accountant.appspot.com',
+    androidClientId: '955905474794-4ljbo2tevk6nomo8msccs4sc0enrdair.apps.googleusercontent.com',
+    iosClientId: '955905474794-s8hljg2f3fm4ugb3esnvoi9l8mt7nd2k.apps.googleusercontent.com',
     iosBundleId: 'app.simpleaccountant.ios',
   );
 

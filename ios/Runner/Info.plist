@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>super_simple_accountant</string>
+	<string>Super Simple Accountant</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -24,6 +24,17 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.955905474794-s8hljg2f3fm4ugb3esnvoi9l8mt7nd2k</string>
+			</array>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -56,5 +67,7 @@
 	<string>We require access to your photo library to scan receipts.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We require access to your camera to scan receipts.</string>
+	<key>GIDClientID</key>
+	<string>955905474794-s8hljg2f3fm4ugb3esnvoi9l8mt7nd2k.apps.googleusercontent.com</string>
 </dict>
 </plist>
