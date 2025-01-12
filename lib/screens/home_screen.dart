@@ -13,6 +13,7 @@ import 'package:super_simple_accountant/services/receipt_scanner_service.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/add_entry_fab.dart';
+import 'package:super_simple_accountant/widgets/auth/auth_bottom_sheet.dart';
 import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/brief_entries_widget.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
@@ -63,6 +64,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _handleReceiptScan(BuildContext context) async {
+    FirebaseAnalytics.instance.logEvent(
+      name: 'scan_receipt_button_pressed',
+    );
+
+    showBottomSheet(
+      context: context,
+      builder: (_) => const AuthBottomSheet(),
+    );
+
+    return;
+
     final navigator = Navigator.of(context);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
