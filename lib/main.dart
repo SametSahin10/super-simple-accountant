@@ -11,11 +11,16 @@ import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/currency_formatter.dart';
 import 'package:super_simple_accountant/firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:super_simple_accountant/repositories/auth/auth_repository.dart';
+import 'package:super_simple_accountant/revenue_cat_config.dart';
 import 'package:super_simple_accountant/screens/main_screen.dart';
 import 'package:super_simple_accountant/state/providers.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: 'environment/.env');
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -31,6 +36,9 @@ void main() async {
   if (kDebugMode) {
     FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false);
   }
+
+  final userId = await AuthRepository().signInAnonymously();
+  await configureRevenueCat(userId: userId);
 
   if (!kIsWeb) MobileAds.instance.initialize();
 

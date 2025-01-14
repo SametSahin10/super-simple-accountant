@@ -4,12 +4,39 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:super_simple_accountant/exceptions.dart';
 
 class AuthRepository {
-  Future<UserCredential?> signInWithGoogle() async {
+  /// Signs in anonymously and returns the user ID.
+  /// If the user is already signed in, it will return the current user ID.
+  Future<String?> signInAnonymously() async {
+    try {
+      String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+      if (userId == null) {
+        final userCredential = await FirebaseAuth.instance.signInAnonymously();
+        userId = userCredential.user?.uid;
+      }
+
+      return userId;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "operation-not-allowed":
+          debugPrint("Anonymous auth hasn't been enabled for this project.");
+          return null;
+        default:
+          debugPrint("Unknown error.");
+          return null;
+      }
+    }
+  }
+
+  Future<String?> signInWithGoogle() async {
+    // TODO: Link with credential
+
     try {
       final googleSignIn = GoogleSignIn();
       final googleUser = await googleSignIn.signIn();
@@ -23,7 +50,10 @@ class AuthRepository {
         idToken: googleAuth.idToken,
       );
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      return userCredential.user?.uid;
     } on FirebaseAuthException catch (e, s) {
       if (e.code == 'email-already-in-use') {
         throw EmailAlreadyInUseException();
@@ -39,7 +69,9 @@ class AuthRepository {
     }
   }
 
-  Future<UserCredential> signInWithApple() async {
+  Future<String?> signInWithApple() async {
+    // TODO: Link with credential
+
     try {
       final rawNonce = generateNonce();
       final sha256Nonce = sha256OfString(rawNonce);
@@ -71,7 +103,10 @@ class AuthRepository {
         appleFullPersonName,
       );
 
-      return await FirebaseAuth.instance.signInWithCredential(appleCredential);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(appleCredential);
+
+      return userCredential.user?.uid;
     } on FirebaseAuthException catch (e, s) {
       if (e.code == 'email-already-in-use') {
         throw EmailAlreadyInUseException();

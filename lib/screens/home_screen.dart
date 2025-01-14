@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:super_simple_accountant/admob_config.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/colors.dart';
@@ -67,13 +68,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     FirebaseAnalytics.instance.logEvent(
       name: 'scan_receipt_button_pressed',
     );
-
-    showBottomSheet(
-      context: context,
-      builder: (_) => const AuthBottomSheet(),
-    );
-
-    return;
 
     final navigator = Navigator.of(context);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
