@@ -3,6 +3,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:super_simple_accountant/admob_config.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/colors.dart';
@@ -11,6 +12,7 @@ import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/navigation.dart';
 import 'package:super_simple_accountant/screens/receipt_confirmation_screen.dart';
 import 'package:super_simple_accountant/services/receipt_scanner_service.dart';
+import 'package:super_simple_accountant/state/entitlement_notifier.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/add_entry_fab.dart';
@@ -28,10 +30,14 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final entitlement = ref.watch(entitlementNotifierProvider);
+
     return Scaffold(
       appBar: ResponsiveAppBar(
         context: context,
-        title: context.l10n.appTitle,
+        title: entitlement == Entitlement.plus
+            ? '${context.l10n.appTitle} Plus'
+            : context.l10n.appTitle,
         showAppIcon: context.largerThanMobile ? true : false,
       ),
       body: const _HomeScreenBody(),
@@ -64,23 +70,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _handleReceiptScan(BuildContext context) async {
-    // Check the entitlement status and launch the in-app purchase flow
-    // if necessary.
+    final navigator = Navigator.of(context);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    final userId = await pushAuthScreen(context);
+    final entitlement = ref.read(entitlementNotifierProvider);
 
-    if (userId == null) {
-      return;
+    if (entitlement == Entitlement.standard) {
+      // Launch the in-app purchase flow
+      final paywallResult = await RevenueCatUI.presentPaywall();
+
+      if (paywallResult != PaywallResult.purchased) return;
+
+      final userId = await pushAuthScreen(navigator);
+
+      debugPrint('User ID: $userId');
     }
-
-    debugPrint('User ID: $userId');
 
     FirebaseAnalytics.instance.logEvent(
       name: 'scan_receipt_button_pressed',
     );
-
-    final navigator = Navigator.of(context);
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     final scanner = ReceiptScannerService();
     final image = await scanner.captureReceipt();

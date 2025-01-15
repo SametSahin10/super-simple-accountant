@@ -10,3 +10,5 @@ const homeScreenBannerAdIdOnIos = "ca-app-pub-9326236517807770/5887451229";
 const reportsScreenBannerAdIdOnIos = "ca-app-pub-9326236517807770/2612514644";
 
 const entryThresholdToRequestInAppReview = 4;
+
+const plusEntitlementId = "plus";

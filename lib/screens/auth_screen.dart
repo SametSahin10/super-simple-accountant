@@ -19,7 +19,7 @@ class AuthScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
               const Text(
-                "Let's set up\nyour account first",
+                "Let's set up your account",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32,

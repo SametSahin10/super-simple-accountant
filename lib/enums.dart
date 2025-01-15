@@ -5,3 +5,5 @@ enum AdUnit {
   addEntryScreenBanner,
   reportsScreenBanner,
 }
+
+enum Entitlement { standard, plus }
