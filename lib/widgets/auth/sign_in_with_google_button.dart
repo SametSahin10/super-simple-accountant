@@ -13,6 +13,8 @@ class SignInWithGoogleButton extends StatelessWidget {
       onPressed: onPressed,
       text: 'Sign in with Google',
       iconAsset: Assets.googleLogo,
+      iconHeight: 24,
+      backgroundColor: Colors.white,
     );
   }
 }

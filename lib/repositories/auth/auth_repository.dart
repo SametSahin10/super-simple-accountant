@@ -35,8 +35,6 @@ class AuthRepository {
   }
 
   Future<String?> signInWithGoogle() async {
-    // TODO: Link with credential
-
     try {
       final googleSignIn = GoogleSignIn();
       final googleUser = await googleSignIn.signIn();
@@ -49,6 +47,14 @@ class AuthRepository {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
+
+      // Check if current user is anonymous
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser?.isAnonymous ?? false) {
+        final userCredential =
+            await currentUser?.linkWithCredential(credential);
+        return userCredential?.user?.uid;
+      }
 
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
@@ -102,6 +108,14 @@ class AuthRepository {
         rawNonce,
         appleFullPersonName,
       );
+
+      // Check if current user is anonymous
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser?.isAnonymous ?? false) {
+        final userCredential =
+            await currentUser?.linkWithCredential(appleCredential);
+        return userCredential?.user?.uid;
+      }
 
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(appleCredential);

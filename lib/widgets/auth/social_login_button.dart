@@ -29,12 +29,15 @@ class SocialLoginButton extends StatelessWidget {
           padding: const EdgeInsets.only(right: 10),
           child: SvgPicture.asset(iconAsset, height: iconHeight ?? 18),
         ),
-        label: Text(
-          text,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: textColor ?? Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
+        label: Padding(
+          padding: const EdgeInsets.only(top: 3),
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: textColor ?? Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
         ),
         style: ElevatedButton.styleFrom(
           elevation: 0,
@@ -42,6 +45,7 @@ class SocialLoginButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(13),
+            side: BorderSide(color: Colors.black),
           ),
         ),
       ),

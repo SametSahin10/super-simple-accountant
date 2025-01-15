@@ -8,6 +8,7 @@ import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
+import 'package:super_simple_accountant/navigation.dart';
 import 'package:super_simple_accountant/screens/receipt_confirmation_screen.dart';
 import 'package:super_simple_accountant/services/receipt_scanner_service.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
@@ -63,6 +64,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _handleReceiptScan(BuildContext context) async {
+    // Check the entitlement status and launch the in-app purchase flow
+    // if necessary.
+
+    final userId = await pushAuthScreen(context);
+
+    if (userId == null) {
+      return;
+    }
+
+    debugPrint('User ID: $userId');
+
     FirebaseAnalytics.instance.logEvent(
       name: 'scan_receipt_button_pressed',
     );
