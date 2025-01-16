@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/screens/all_entries_screen.dart';
@@ -48,7 +49,7 @@ class _ShowMoreWidget extends StatelessWidget {
     return TextButton(
       onPressed: () {
         FirebaseAnalytics.instance.logEvent(
-          name: 'see_more_entries_button_pressed',
+          name: AnalyticsEvents.seeMoreEntriesButtonPressed,
         );
 
         Navigator.push(

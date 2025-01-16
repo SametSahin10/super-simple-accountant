@@ -8,6 +8,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:super_simple_accountant/admob_config.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/enums.dart';
@@ -57,7 +58,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             label: 'Add Basic Entry',
             onTap: () {
               FirebaseAnalytics.instance.logEvent(
-                name: 'add_entry_button_pressed',
+                name: AnalyticsEvents.addEntryButtonPressed,
               );
 
               pushAddEntryScreen(context);
@@ -92,7 +93,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // }
 
     FirebaseAnalytics.instance.logEvent(
-      name: 'scan_receipt_button_pressed',
+      name: AnalyticsEvents.scanReceiptButtonPressed,
     );
 
     final imageSource = await showModalBottomSheet<ImageSource>(

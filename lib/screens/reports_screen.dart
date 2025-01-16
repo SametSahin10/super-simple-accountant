@@ -7,6 +7,7 @@ import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/admob_config.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/currency_formatter.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -105,8 +106,10 @@ class _EntriesBarChartState extends ConsumerState<EntriesBarChart> {
             currentGrouping: _grouping,
             onGroupingChanged: (grouping) {
               FirebaseAnalytics.instance.logEvent(
-                name: "reports_screen_grouping_changed",
-                parameters: {"grouping": grouping.name},
+                name: AnalyticsEvents.reportsScreenGroupingChanged,
+                parameters: {
+                  AnalyticsParameters.grouping: grouping.name,
+                },
               );
 
               setState(() => _grouping = grouping);

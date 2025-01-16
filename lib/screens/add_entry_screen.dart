@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:super_simple_accountant/admob_config.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/constants.dart';
 import 'package:super_simple_accountant/enums.dart';
@@ -139,7 +140,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     required Category? selectedCategory,
   }) {
     FirebaseAnalytics.instance.logEvent(
-      name: 'increase_amount_button_pressed',
+      name: AnalyticsEvents.increaseAmountButtonPressed,
     );
 
     final addEntryScreenModel = ref.read(addEntryScreenModelProvider);
@@ -181,7 +182,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     required Category? selectedCategory,
   }) {
     FirebaseAnalytics.instance.logEvent(
-      name: 'decrease_amount_button_pressed',
+      name: AnalyticsEvents.decreaseAmountButtonPressed,
     );
 
     final addEntryScreenModel = ref.read(addEntryScreenModelProvider);

@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/screens/about_screen.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
@@ -79,8 +80,10 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     FirebaseAnalytics.instance.logEvent(
-      name: "bottom_navigation_bar_item_tapped",
-      parameters: {"bottom_tab_name": bottomTabName},
+      name: AnalyticsEvents.bottomNavigationBarItemTapped,
+      parameters: {
+        AnalyticsParameters.bottomTabName: bottomTabName,
+      },
     );
   }
 }

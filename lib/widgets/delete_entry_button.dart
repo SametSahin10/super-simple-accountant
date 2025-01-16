@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
@@ -21,7 +22,7 @@ class DeleteEntryButton extends ConsumerWidget {
     return ElevatedButton(
       onPressed: () async {
         FirebaseAnalytics.instance.logEvent(
-          name: 'delete_entry_button_pressed',
+          name: AnalyticsEvents.deleteEntryButtonPressed,
         );
 
         final confirmed = await showConfirmDeletingEntryDialog(context);

@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/screens/add_entry_screen.dart';
@@ -13,7 +14,7 @@ class AddEntryFab extends StatelessWidget {
       color: primaryColor,
       onPressed: () {
         FirebaseAnalytics.instance.logEvent(
-          name: 'add_entry_button_pressed',
+          name: AnalyticsEvents.addEntryButtonPressed,
         );
 
         pushAddEntryScreen(context);

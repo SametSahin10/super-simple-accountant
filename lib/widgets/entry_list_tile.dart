@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
@@ -64,7 +65,7 @@ class EntryListTile extends ConsumerWidget {
         ),
         onTap: () {
           FirebaseAnalytics.instance.logEvent(
-            name: 'entry_list_tile_tapped',
+            name: AnalyticsEvents.entryListTileTapped,
           );
 
           showModalBottomSheet(

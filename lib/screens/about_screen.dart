@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +55,7 @@ class AboutScreen extends StatelessWidget {
                 subtitle: Text(context.l10n.twitter_handle),
                 onTap: () {
                   FirebaseAnalytics.instance.logEvent(
-                    name: 'about_screen_twitter_tapped',
+                    name: AnalyticsEvents.aboutScreenTwitterTapped,
                   );
                   launchUrl(Uri.parse('https://twitter.com/accountantapp'));
                 },
@@ -65,7 +66,7 @@ class AboutScreen extends StatelessWidget {
                 subtitle: Text(context.l10n.instagram_handle),
                 onTap: () {
                   FirebaseAnalytics.instance.logEvent(
-                    name: 'about_screen_instagram_tapped',
+                    name: AnalyticsEvents.aboutScreenInstagramTapped,
                   );
                   launchUrl(
                       Uri.parse('https://instagram.com/supersimpleaccountant'));
@@ -77,7 +78,7 @@ class AboutScreen extends StatelessWidget {
                 subtitle: Text(context.l10n.contact_subtitle),
                 onTap: () {
                   FirebaseAnalytics.instance.logEvent(
-                    name: 'about_screen_email_tapped',
+                    name: AnalyticsEvents.aboutScreenEmailTapped,
                   );
                   launchUrl(Uri.parse('mailto:supersimpleacc10@gmail.com'));
                 },
@@ -92,7 +93,7 @@ class AboutScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   FirebaseAnalytics.instance.logEvent(
-                    name: 'about_screen_website_tapped',
+                    name: AnalyticsEvents.aboutScreenWebsiteTapped,
                   );
                   launchUrl(Uri.parse('https://simpleaccountant.app'));
                 },
