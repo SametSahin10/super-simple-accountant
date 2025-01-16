@@ -1,18 +1,21 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:super_simple_accountant/constants.dart';
+import 'package:super_simple_accountant/enums.dart';
+import 'package:super_simple_accountant/state/entitlement_notifier.dart';
 
-class BannerAdWidget extends StatefulWidget {
+class BannerAdWidget extends ConsumerStatefulWidget {
   final String adUnitId;
 
   const BannerAdWidget({super.key, required this.adUnitId});
 
   @override
-  State<BannerAdWidget> createState() => _BannerAdWidgetState();
+  ConsumerState<BannerAdWidget> createState() => _BannerAdWidgetState();
 }
 
-class _BannerAdWidgetState extends State<BannerAdWidget> {
+class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   BannerAd? _bannerAd;
 
   @override
@@ -23,6 +26,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final entitlement = ref.watch(entitlementNotifierProvider);
+    if (entitlement == Entitlement.plus) return const SizedBox.shrink();
+
     return _bannerAd == null
         ? const SizedBox()
         : Container(
