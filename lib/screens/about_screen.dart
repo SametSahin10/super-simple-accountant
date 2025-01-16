@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/assets.dart';
 import 'package:super_simple_accountant/extensions.dart';
+import 'package:super_simple_accountant/screens/attributions_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -39,7 +40,7 @@ class AboutScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 20),
               Text(
                 context.l10n.social_media_title,
                 style: const TextStyle(
@@ -48,7 +49,7 @@ class AboutScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               ListTile(
                 leading: const Icon(Icons.flutter_dash),
                 title: Text(context.l10n.twitter_title),
@@ -83,7 +84,19 @@ class AboutScreen extends StatelessWidget {
                   launchUrl(Uri.parse('mailto:supersimpleacc10@gmail.com'));
                 },
               ),
-              const SizedBox(height: 24),
+              ListTile(
+                leading: const Icon(Icons.attribution),
+                title: Text(context.l10n.attributions_title),
+                subtitle: Text(context.l10n.attributions_subtitle),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AttributionsScreen(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 8),
               Text(
                 context.l10n.copyright_text,
                 style: const TextStyle(color: Colors.grey),
