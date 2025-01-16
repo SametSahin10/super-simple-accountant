@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart' hide WidgetState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:super_simple_accountant/admob_config.dart';
 import 'package:super_simple_accountant/assets.dart';
@@ -11,12 +14,14 @@ import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/navigation.dart';
 import 'package:super_simple_accountant/screens/receipt_confirmation_screen.dart';
+import 'package:super_simple_accountant/services/image_compressor_service.dart';
 import 'package:super_simple_accountant/services/receipt_scanner_service.dart';
 import 'package:super_simple_accountant/state/entitlement_notifier.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
 import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/add_entry_fab.dart';
 import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
+import 'package:super_simple_accountant/widgets/bottom_sheets/choose_image_source_bottom_sheet.dart';
 import 'package:super_simple_accountant/widgets/brief_entries_widget.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
 
@@ -73,31 +78,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final navigator = Navigator.of(context);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    final entitlement = ref.read(entitlementNotifierProvider);
+    // final entitlement = ref.read(entitlementNotifierProvider);
 
-    if (entitlement == Entitlement.standard) {
-      // Launch the in-app purchase flow
-      final paywallResult = await RevenueCatUI.presentPaywall();
+    // if (entitlement == Entitlement.standard) {
+    //   // Launch the in-app purchase flow
+    //   final paywallResult = await RevenueCatUI.presentPaywall();
 
-      if (paywallResult != PaywallResult.purchased) return;
+    //   if (paywallResult != PaywallResult.purchased) return;
 
-      final userId = await pushAuthScreen(navigator);
+    //   final userId = await pushAuthScreen(navigator);
 
-      debugPrint('User ID: $userId');
-    }
+    //   debugPrint('User ID: $userId');
+    // }
 
     FirebaseAnalytics.instance.logEvent(
       name: 'scan_receipt_button_pressed',
     );
 
+    final imageSource = await showModalBottomSheet<ImageSource>(
+      context: context,
+      builder: (context) => const ChooseImageSourceBottomSheet(),
+    );
+
+    if (imageSource == null) return;
+
     final scanner = ReceiptScannerService();
-    final image = await scanner.captureReceipt();
+    final image = await scanner.captureReceipt(imageSource);
 
     if (image == null) return;
     if (!context.mounted) return;
 
+    final file = File(image.path);
+    final fileBytes = await file.readAsBytes();
+
+    final compressedImage =
+        await ImageCompressorService().compressFile(fileBytes);
+
     context.showProgressDialog(text: 'Analyzing receipt...');
-    final receiptData = await scanner.processReceipt(image);
+    final receiptData = await scanner.processReceipt(compressedImage);
     navigator.pop();
 
     if (receiptData == null) {
