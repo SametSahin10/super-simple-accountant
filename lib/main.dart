@@ -82,16 +82,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class _Builder extends StatefulWidget {
+class _Builder extends ConsumerStatefulWidget {
   final Widget child;
 
   const _Builder({required this.child});
 
   @override
-  State<_Builder> createState() => _BuilderState();
+  ConsumerState<_Builder> createState() => _BuilderState();
 }
 
-class _BuilderState extends State<_Builder> {
+class _BuilderState extends ConsumerState<_Builder> {
   CurrencyFormatter? currencyFormatter;
 
   @override

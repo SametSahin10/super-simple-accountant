@@ -13,13 +13,15 @@ _$EntriesStateModelImpl _$$EntriesStateModelImplFromJson(
           .map((e) => Entry.fromJson(e as Map<String, dynamic>))
           .toList(),
       widgetState: $enumDecode(_$WidgetStateEnumMap, json['widgetState']),
+      isSyncing: json['isSyncing'] as bool,
     );
 
 Map<String, dynamic> _$$EntriesStateModelImplToJson(
         _$EntriesStateModelImpl instance) =>
     <String, dynamic>{
-      'entries': instance.entries,
+      'entries': instance.entries.map((e) => e.toJson()).toList(),
       'widgetState': _$WidgetStateEnumMap[instance.widgetState]!,
+      'isSyncing': instance.isSyncing,
     };
 
 const _$WidgetStateEnumMap = {

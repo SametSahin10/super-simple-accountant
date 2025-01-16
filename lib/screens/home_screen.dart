@@ -25,6 +25,7 @@ import 'package:super_simple_accountant/widgets/banner_ad_widget.dart';
 import 'package:super_simple_accountant/widgets/bottom_sheets/choose_image_source_bottom_sheet.dart';
 import 'package:super_simple_accountant/widgets/brief_entries_widget.dart';
 import 'package:super_simple_accountant/widgets/responsive_app_bar.dart';
+import 'package:super_simple_accountant/widgets/syncing_entries_widget.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -79,84 +80,92 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final navigator = Navigator.of(context);
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    // final entitlement = ref.read(entitlementNotifierProvider);
+    final entitlement = ref.read(entitlementNotifierProvider);
 
-    // if (entitlement == Entitlement.standard) {
-    //   // Launch the in-app purchase flow
-    //   final paywallResult = await RevenueCatUI.presentPaywall();
+    if (entitlement == Entitlement.standard) {
+      // Launch the in-app purchase flow
+      final paywallResult = await RevenueCatUI.presentPaywall();
 
-    //   if (paywallResult != PaywallResult.purchased) return;
+      if (paywallResult != PaywallResult.purchased) return;
 
-    //   final userId = await pushAuthScreen(navigator);
+      final userId = await pushAuthScreen(navigator);
 
-    //   debugPrint('User ID: $userId');
-    // }
+      debugPrint('User ID: $userId');
+    }
 
     FirebaseAnalytics.instance.logEvent(
       name: AnalyticsEvents.scanReceiptButtonPressed,
     );
 
-    final imageSource = await showModalBottomSheet<ImageSource>(
-      context: context,
-      builder: (context) => const ChooseImageSourceBottomSheet(),
-    );
-
-    if (imageSource == null) return;
-
-    final scanner = ReceiptScannerService();
-    final image = await scanner.captureReceipt(imageSource);
-
-    if (image == null) return;
-    if (!context.mounted) return;
-
-    final file = File(image.path);
-    final fileBytes = await file.readAsBytes();
-
-    final compressedImage =
-        await ImageCompressorService().compressFile(fileBytes);
-
-    context.showProgressDialog(text: 'Analyzing receipt...');
-    final receiptData = await scanner.processReceipt(compressedImage);
-    navigator.pop();
-
-    if (receiptData == null) {
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(content: Text('Failed to analyze receipt')),
+    try {
+      final imageSource = await showModalBottomSheet<ImageSource>(
+        context: context,
+        builder: (context) => const ChooseImageSourceBottomSheet(),
       );
 
-      return;
-    }
+      if (imageSource == null) return;
 
-    if (!context.mounted) {
+      final scanner = ReceiptScannerService();
+      final image = await scanner.captureReceipt(imageSource);
+
+      if (image == null) return;
+      if (!context.mounted) return;
+
+      final file = File(image.path);
+      final fileBytes = await file.readAsBytes();
+
+      final compressedImage =
+          await ImageCompressorService().compressFile(fileBytes);
+
+      context.showProgressDialog(text: 'Analyzing receipt...');
+      final receiptData = await scanner.processReceipt(compressedImage);
+      navigator.pop();
+
+      if (receiptData == null) {
+        scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text('Failed to analyze receipt')),
+        );
+
+        return;
+      }
+
+      if (!context.mounted) {
+        scaffoldMessenger.showSnackBar(
+          const SnackBar(
+            content: Text("An error occurred."),
+          ),
+        );
+
+        FirebaseCrashlytics.instance.recordError(
+          Exception(
+            "Receipt has been analyzed but the results cannot be shown "
+            "because the context is not mounted.",
+          ),
+          StackTrace.current,
+        );
+
+        return;
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return ReceiptConfirmationScreen(
+              receiptAnalysisResult: receiptData,
+              imagePath: image.path,
+              imageInBytes: compressedImage,
+            );
+          },
+        ),
+      );
+    } catch (err) {
       scaffoldMessenger.showSnackBar(
         const SnackBar(
-          content: Text("An error occurred."),
+          content: Text('Failed to scan receipt'),
         ),
       );
-
-      FirebaseCrashlytics.instance.recordError(
-        Exception(
-          "Receipt has been analyzed but the results cannot be shown "
-          "because the context is not mounted.",
-        ),
-        StackTrace.current,
-      );
-
-      return;
     }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) {
-          return ReceiptConfirmationScreen(
-            receiptAnalysisResult: receiptData,
-            imagePath: image.path,
-            imageInBytes: compressedImage,
-          );
-        },
-      ),
-    );
   }
 }
 
@@ -168,7 +177,7 @@ class _HomeScreenBody extends ConsumerWidget {
     final entriesStateModel = ref.watch(entriesStateNotifierProvider);
 
     if (entriesStateModel.widgetState == WidgetState.loading) {
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     }
 
     final entriesStateNotifier =
@@ -188,6 +197,8 @@ class _HomeScreenBody extends ConsumerWidget {
             BannerAdWidget(
               adUnitId: getAdUnitId(AdUnit.homeScreenBanner),
             ),
+            const SizedBox(height: 32),
+            const SyncingEntriesWidget(),
             Expanded(
               child: Column(
                 mainAxisAlignment: context.largerThanMobile

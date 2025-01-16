@@ -13,6 +13,7 @@ class Entry with _$Entry {
     String? description,
     Category? category,
     required EntrySource source,
+    @Default(false) bool isSynced,
   }) = _Entry;
 
   factory Entry.fromJson(Map<String, dynamic> json) => _$EntryFromJson(json);

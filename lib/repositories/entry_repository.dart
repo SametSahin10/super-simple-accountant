@@ -1,46 +1,86 @@
-import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
+import 'package:super_simple_accountant/data_sources/entry_local_data_source.dart';
+import 'package:super_simple_accountant/data_sources/entry_remote_data_source.dart';
 import 'package:super_simple_accountant/models/entry.dart';
+import 'package:super_simple_accountant/services/connectivity_service.dart';
 
 class EntryRepository {
-  static const String _key = 'entries';
+  final _entryRemoteDataSource = EntryRemoteDataSource();
+  final _entryLocalDataSource = EntryLocalDataSource();
+  final _connectivityService = ConnectivityService();
 
-  Future<void> saveEntry(Entry entry) async {
-    final prefs = await SharedPreferences.getInstance();
-    List<Entry> entries = await getEntries();
-    entries.add(entry);
-    await prefs.setStringList(
-      _key,
-      entries.map(
-        (entry) {
-          return jsonEncode(entry.toJson());
-        },
-      ).toList(),
-    );
+  Future<void> syncLocalEntriesToRemote(String userId) async {
+    try {
+      debugPrint('Syncing local entries to remote...');
+
+      if (!await _connectivityService.hasInternetConnection()) return;
+
+      final localEntries = await _entryLocalDataSource.getEntries();
+
+      for (final entry in localEntries) {
+        if (entry.isSynced) continue;
+
+        try {
+          await _entryRemoteDataSource.createEntry(entry);
+          await _entryLocalDataSource.markEntrySynced(entry);
+        } catch (e) {
+          continue;
+        }
+      }
+    } catch (e, stack) {
+      debugPrint('Error syncing local entries to remote: $e');
+      FirebaseCrashlytics.instance.recordError(e, stack);
+    }
   }
 
-  Future<void> deleteEntry(Entry entry) async {
-    final prefs = await SharedPreferences.getInstance();
-    final entries = await getEntries();
-    final newEntries = entries.where((e) => e != entry).toList();
+  Future<void> saveEntry({
+    required Entry entry,
+    required bool isPlusUser,
+  }) async {
+    final unsyncedEntry = entry.copyWith(isSynced: false);
+    await _entryLocalDataSource.saveEntry(unsyncedEntry);
 
-    await prefs.setStringList(
-      _key,
-      newEntries.map((entry) => jsonEncode(entry.toJson())).toList(),
-    );
+    if (await _connectivityService.hasInternetConnection() && isPlusUser) {
+      try {
+        await _entryRemoteDataSource.createEntry(entry);
+        await _entryLocalDataSource.saveEntry(entry);
+      } catch (e) {
+        // Handle error but don't rethrow since local save succeeded
+      }
+    }
   }
 
-  Future<List<Entry>> getEntries() async {
-    final prefs = await SharedPreferences.getInstance();
-    final entriesJson = prefs.getStringList(_key) ?? [];
+  Future<void> deleteEntry({
+    required Entry entry,
+    required bool isPlusUser,
+  }) async {
+    await _entryLocalDataSource.deleteEntry(entry);
 
-    return entriesJson.map(
-      (entryAsString) {
-        return Entry.fromJson(
-          jsonDecode(entryAsString),
-        );
-      },
-    ).toList();
+    if (await _connectivityService.hasInternetConnection() && isPlusUser) {
+      try {
+        await _entryRemoteDataSource.deleteEntry(entry);
+      } catch (e) {
+        // Handle error but don't rethrow since local delete succeeded
+      }
+    }
+  }
+
+  Future<List<Entry>> getEntries({
+    required String userId,
+    required bool isPlusUser,
+  }) async {
+    if (await _connectivityService.hasInternetConnection() && isPlusUser) {
+      try {
+        final remoteEntries =
+            await _entryRemoteDataSource.getAllEntries(userId: userId);
+        // Update local storage with remote data
+        await _entryLocalDataSource.syncWithRemote(remoteEntries);
+        return remoteEntries;
+      } catch (e) {
+        return await _entryLocalDataSource.getEntries();
+      }
+    }
+    return await _entryLocalDataSource.getEntries();
   }
 }

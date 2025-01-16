@@ -10,12 +10,14 @@ class EntriesStateModel with _$EntriesStateModel {
   factory EntriesStateModel({
     required List<Entry> entries,
     required WidgetState widgetState,
+    required bool isSyncing,
   }) = _EntriesStateModel;
 
   factory EntriesStateModel.initial() {
     return EntriesStateModel(
       entries: [],
       widgetState: WidgetState.initial,
+      isSyncing: false,
     );
   }
 

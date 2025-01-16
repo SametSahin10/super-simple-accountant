@@ -22,6 +22,7 @@ EntriesStateModel _$EntriesStateModelFromJson(Map<String, dynamic> json) {
 mixin _$EntriesStateModel {
   List<Entry> get entries => throw _privateConstructorUsedError;
   WidgetState get widgetState => throw _privateConstructorUsedError;
+  bool get isSyncing => throw _privateConstructorUsedError;
 
   /// Serializes this EntriesStateModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +40,7 @@ abstract class $EntriesStateModelCopyWith<$Res> {
           EntriesStateModel value, $Res Function(EntriesStateModel) then) =
       _$EntriesStateModelCopyWithImpl<$Res, EntriesStateModel>;
   @useResult
-  $Res call({List<Entry> entries, WidgetState widgetState});
+  $Res call({List<Entry> entries, WidgetState widgetState, bool isSyncing});
 }
 
 /// @nodoc
@@ -59,6 +60,7 @@ class _$EntriesStateModelCopyWithImpl<$Res, $Val extends EntriesStateModel>
   $Res call({
     Object? entries = null,
     Object? widgetState = null,
+    Object? isSyncing = null,
   }) {
     return _then(_value.copyWith(
       entries: null == entries
@@ -69,6 +71,10 @@ class _$EntriesStateModelCopyWithImpl<$Res, $Val extends EntriesStateModel>
           ? _value.widgetState
           : widgetState // ignore: cast_nullable_to_non_nullable
               as WidgetState,
+      isSyncing: null == isSyncing
+          ? _value.isSyncing
+          : isSyncing // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -81,7 +87,7 @@ abstract class _$$EntriesStateModelImplCopyWith<$Res>
       __$$EntriesStateModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Entry> entries, WidgetState widgetState});
+  $Res call({List<Entry> entries, WidgetState widgetState, bool isSyncing});
 }
 
 /// @nodoc
@@ -99,6 +105,7 @@ class __$$EntriesStateModelImplCopyWithImpl<$Res>
   $Res call({
     Object? entries = null,
     Object? widgetState = null,
+    Object? isSyncing = null,
   }) {
     return _then(_$EntriesStateModelImpl(
       entries: null == entries
@@ -109,6 +116,10 @@ class __$$EntriesStateModelImplCopyWithImpl<$Res>
           ? _value.widgetState
           : widgetState // ignore: cast_nullable_to_non_nullable
               as WidgetState,
+      isSyncing: null == isSyncing
+          ? _value.isSyncing
+          : isSyncing // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -117,7 +128,9 @@ class __$$EntriesStateModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$EntriesStateModelImpl implements _EntriesStateModel {
   _$EntriesStateModelImpl(
-      {required final List<Entry> entries, required this.widgetState})
+      {required final List<Entry> entries,
+      required this.widgetState,
+      required this.isSyncing})
       : _entries = entries;
 
   factory _$EntriesStateModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -133,10 +146,12 @@ class _$EntriesStateModelImpl implements _EntriesStateModel {
 
   @override
   final WidgetState widgetState;
+  @override
+  final bool isSyncing;
 
   @override
   String toString() {
-    return 'EntriesStateModel(entries: $entries, widgetState: $widgetState)';
+    return 'EntriesStateModel(entries: $entries, widgetState: $widgetState, isSyncing: $isSyncing)';
   }
 
   @override
@@ -146,13 +161,15 @@ class _$EntriesStateModelImpl implements _EntriesStateModel {
             other is _$EntriesStateModelImpl &&
             const DeepCollectionEquality().equals(other._entries, _entries) &&
             (identical(other.widgetState, widgetState) ||
-                other.widgetState == widgetState));
+                other.widgetState == widgetState) &&
+            (identical(other.isSyncing, isSyncing) ||
+                other.isSyncing == isSyncing));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_entries), widgetState);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_entries), widgetState, isSyncing);
 
   /// Create a copy of EntriesStateModel
   /// with the given fields replaced by the non-null parameter values.
@@ -174,7 +191,8 @@ class _$EntriesStateModelImpl implements _EntriesStateModel {
 abstract class _EntriesStateModel implements EntriesStateModel {
   factory _EntriesStateModel(
       {required final List<Entry> entries,
-      required final WidgetState widgetState}) = _$EntriesStateModelImpl;
+      required final WidgetState widgetState,
+      required final bool isSyncing}) = _$EntriesStateModelImpl;
 
   factory _EntriesStateModel.fromJson(Map<String, dynamic> json) =
       _$EntriesStateModelImpl.fromJson;
@@ -183,6 +201,8 @@ abstract class _EntriesStateModel implements EntriesStateModel {
   List<Entry> get entries;
   @override
   WidgetState get widgetState;
+  @override
+  bool get isSyncing;
 
   /// Create a copy of EntriesStateModel
   /// with the given fields replaced by the non-null parameter values.

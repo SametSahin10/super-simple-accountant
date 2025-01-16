@@ -52,6 +52,8 @@ dependencies:
   flutter_dotenv: ^5.2.1
   flutter_image_compress: ^2.4.0
   firebase_storage: ^12.4.0
+  cloud_firestore: ^5.6.1
+  connectivity_plus: ^6.1.2
 
 dev_dependencies:
   flutter_test:
