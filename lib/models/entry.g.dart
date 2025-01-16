@@ -43,6 +43,7 @@ _$ReceiptEntrySourceImpl _$$ReceiptEntrySourceImplFromJson(
         Map<String, dynamic> json) =>
     _$ReceiptEntrySourceImpl(
       imagePath: json['imagePath'] as String,
+      imageUrl: json['imageUrl'] as String?,
       merchantName: json['merchantName'] as String,
       rawText: json['rawText'] as String?,
       $type: json['runtimeType'] as String?,
@@ -52,6 +53,7 @@ Map<String, dynamic> _$$ReceiptEntrySourceImplToJson(
         _$ReceiptEntrySourceImpl instance) =>
     <String, dynamic>{
       'imagePath': instance.imagePath,
+      'imageUrl': instance.imageUrl,
       'merchantName': instance.merchantName,
       'rawText': instance.rawText,
       'runtimeType': instance.$type,

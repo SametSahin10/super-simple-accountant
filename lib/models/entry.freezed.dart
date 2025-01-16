@@ -317,22 +317,24 @@ mixin _$EntrySource {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() basic,
-    required TResult Function(
-            String imagePath, String merchantName, String? rawText)
+    required TResult Function(String imagePath, String? imageUrl,
+            String merchantName, String? rawText)
         receipt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? basic,
-    TResult? Function(String imagePath, String merchantName, String? rawText)?
+    TResult? Function(String imagePath, String? imageUrl, String merchantName,
+            String? rawText)?
         receipt,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? basic,
-    TResult Function(String imagePath, String merchantName, String? rawText)?
+    TResult Function(String imagePath, String? imageUrl, String merchantName,
+            String? rawText)?
         receipt,
     required TResult orElse(),
   }) =>
@@ -432,8 +434,8 @@ class _$BasicEntrySourceImpl implements BasicEntrySource {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() basic,
-    required TResult Function(
-            String imagePath, String merchantName, String? rawText)
+    required TResult Function(String imagePath, String? imageUrl,
+            String merchantName, String? rawText)
         receipt,
   }) {
     return basic();
@@ -443,7 +445,8 @@ class _$BasicEntrySourceImpl implements BasicEntrySource {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? basic,
-    TResult? Function(String imagePath, String merchantName, String? rawText)?
+    TResult? Function(String imagePath, String? imageUrl, String merchantName,
+            String? rawText)?
         receipt,
   }) {
     return basic?.call();
@@ -453,7 +456,8 @@ class _$BasicEntrySourceImpl implements BasicEntrySource {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? basic,
-    TResult Function(String imagePath, String merchantName, String? rawText)?
+    TResult Function(String imagePath, String? imageUrl, String merchantName,
+            String? rawText)?
         receipt,
     required TResult orElse(),
   }) {
@@ -515,7 +519,11 @@ abstract class _$$ReceiptEntrySourceImplCopyWith<$Res> {
           $Res Function(_$ReceiptEntrySourceImpl) then) =
       __$$ReceiptEntrySourceImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String imagePath, String merchantName, String? rawText});
+  $Res call(
+      {String imagePath,
+      String? imageUrl,
+      String merchantName,
+      String? rawText});
 }
 
 /// @nodoc
@@ -532,6 +540,7 @@ class __$$ReceiptEntrySourceImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? imagePath = null,
+    Object? imageUrl = freezed,
     Object? merchantName = null,
     Object? rawText = freezed,
   }) {
@@ -540,6 +549,10 @@ class __$$ReceiptEntrySourceImplCopyWithImpl<$Res>
           ? _value.imagePath
           : imagePath // ignore: cast_nullable_to_non_nullable
               as String,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       merchantName: null == merchantName
           ? _value.merchantName
           : merchantName // ignore: cast_nullable_to_non_nullable
@@ -557,6 +570,7 @@ class __$$ReceiptEntrySourceImplCopyWithImpl<$Res>
 class _$ReceiptEntrySourceImpl implements ReceiptEntrySource {
   const _$ReceiptEntrySourceImpl(
       {required this.imagePath,
+      this.imageUrl,
       required this.merchantName,
       this.rawText,
       final String? $type})
@@ -568,6 +582,8 @@ class _$ReceiptEntrySourceImpl implements ReceiptEntrySource {
   @override
   final String imagePath;
   @override
+  final String? imageUrl;
+  @override
   final String merchantName;
   @override
   final String? rawText;
@@ -577,7 +593,7 @@ class _$ReceiptEntrySourceImpl implements ReceiptEntrySource {
 
   @override
   String toString() {
-    return 'EntrySource.receipt(imagePath: $imagePath, merchantName: $merchantName, rawText: $rawText)';
+    return 'EntrySource.receipt(imagePath: $imagePath, imageUrl: $imageUrl, merchantName: $merchantName, rawText: $rawText)';
   }
 
   @override
@@ -587,6 +603,8 @@ class _$ReceiptEntrySourceImpl implements ReceiptEntrySource {
             other is _$ReceiptEntrySourceImpl &&
             (identical(other.imagePath, imagePath) ||
                 other.imagePath == imagePath) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.merchantName, merchantName) ||
                 other.merchantName == merchantName) &&
             (identical(other.rawText, rawText) || other.rawText == rawText));
@@ -595,7 +613,7 @@ class _$ReceiptEntrySourceImpl implements ReceiptEntrySource {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, imagePath, merchantName, rawText);
+      Object.hash(runtimeType, imagePath, imageUrl, merchantName, rawText);
 
   /// Create a copy of EntrySource
   /// with the given fields replaced by the non-null parameter values.
@@ -610,33 +628,35 @@ class _$ReceiptEntrySourceImpl implements ReceiptEntrySource {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() basic,
-    required TResult Function(
-            String imagePath, String merchantName, String? rawText)
+    required TResult Function(String imagePath, String? imageUrl,
+            String merchantName, String? rawText)
         receipt,
   }) {
-    return receipt(imagePath, merchantName, rawText);
+    return receipt(imagePath, imageUrl, merchantName, rawText);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? basic,
-    TResult? Function(String imagePath, String merchantName, String? rawText)?
+    TResult? Function(String imagePath, String? imageUrl, String merchantName,
+            String? rawText)?
         receipt,
   }) {
-    return receipt?.call(imagePath, merchantName, rawText);
+    return receipt?.call(imagePath, imageUrl, merchantName, rawText);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? basic,
-    TResult Function(String imagePath, String merchantName, String? rawText)?
+    TResult Function(String imagePath, String? imageUrl, String merchantName,
+            String? rawText)?
         receipt,
     required TResult orElse(),
   }) {
     if (receipt != null) {
-      return receipt(imagePath, merchantName, rawText);
+      return receipt(imagePath, imageUrl, merchantName, rawText);
     }
     return orElse();
   }
@@ -683,6 +703,7 @@ class _$ReceiptEntrySourceImpl implements ReceiptEntrySource {
 abstract class ReceiptEntrySource implements EntrySource {
   const factory ReceiptEntrySource(
       {required final String imagePath,
+      final String? imageUrl,
       required final String merchantName,
       final String? rawText}) = _$ReceiptEntrySourceImpl;
 
@@ -690,6 +711,7 @@ abstract class ReceiptEntrySource implements EntrySource {
       _$ReceiptEntrySourceImpl.fromJson;
 
   String get imagePath;
+  String? get imageUrl;
   String get merchantName;
   String? get rawText;
 

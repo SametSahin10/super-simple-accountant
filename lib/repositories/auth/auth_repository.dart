@@ -76,8 +76,6 @@ class AuthRepository {
   }
 
   Future<String?> signInWithApple() async {
-    // TODO: Link with credential
-
     try {
       final rawNonce = generateNonce();
       final sha256Nonce = sha256OfString(rawNonce);

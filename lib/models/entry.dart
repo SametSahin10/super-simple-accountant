@@ -24,6 +24,7 @@ class EntrySource with _$EntrySource {
 
   const factory EntrySource.receipt({
     required String imagePath,
+    String? imageUrl,
     required String merchantName,
     String? rawText,
   }) = ReceiptEntrySource;

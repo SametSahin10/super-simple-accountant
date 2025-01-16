@@ -152,6 +152,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           return ReceiptConfirmationScreen(
             receiptAnalysisResult: receiptData,
             imagePath: image.path,
+            imageInBytes: compressedImage,
           );
         },
       ),
