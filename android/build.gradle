@@ -1,3 +1,19 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    
+    dependencies {
+        // START: These dependencies should be added by flutterfire normally
+        // START: but they weren't. So we're adding them here.
+        classpath 'com.google.gms:google-services:4.4.2'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.2'
+        // END: These dependencies should be added by flutterfire normally
+        // END: but they weren't. So we're adding them here.
+    }
+}
+
 allprojects {
     repositories {
         google()
