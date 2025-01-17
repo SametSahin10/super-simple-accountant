@@ -67,10 +67,16 @@ class EntryRepository {
   }
 
   Future<List<Entry>> getEntries({
-    required String userId,
+    String? userId,
     required bool isPlusUser,
   }) async {
-    if (await _connectivityService.hasInternetConnection() && isPlusUser) {
+    final hasInternetConnection =
+        await _connectivityService.hasInternetConnection();
+
+    final getRemoteEntries =
+        hasInternetConnection && userId != null && isPlusUser;
+
+    if (getRemoteEntries) {
       try {
         final remoteEntries =
             await _entryRemoteDataSource.getAllEntries(userId: userId);
@@ -81,6 +87,7 @@ class EntryRepository {
         return await _entryLocalDataSource.getEntries();
       }
     }
+
     return await _entryLocalDataSource.getEntries();
   }
 }

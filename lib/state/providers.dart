@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_simple_accountant/currency_formatter.dart';
@@ -22,4 +23,9 @@ class SelectedCategoryNotifier extends _$SelectedCategoryNotifier {
   setSelectedCategory(Category category) {
     state = category;
   }
+}
+
+@riverpod
+Stream<User?> userStream(Ref ref) {
+  return FirebaseAuth.instance.authStateChanges();
 }

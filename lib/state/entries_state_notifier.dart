@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/models/entries_state_model.dart';
@@ -9,6 +10,7 @@ import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/repositories/entry_repository.dart';
 import 'package:super_simple_accountant/services/connectivity_service.dart';
 import 'package:super_simple_accountant/state/entitlement_notifier.dart';
+import 'package:super_simple_accountant/state/providers.dart';
 
 part 'entries_state_notifier.g.dart';
 
@@ -34,10 +36,18 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
     state = state.copyWith(widgetState: WidgetState.loading);
     final entryRepository = EntryRepository();
 
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final userAsyncValue = await ref.watch(userStreamProvider.future);
+    final userId = userAsyncValue?.uid;
+
+    if (userId == null) {
+      FirebaseCrashlytics.instance.recordError(
+        'getEntries has been called with a null user ID. This should not happen.',
+        StackTrace.current,
+      );
+    }
 
     final entries = await entryRepository.getEntries(
-      userId: userId!,
+      userId: userId,
       isPlusUser: isPlusUser(),
     );
 

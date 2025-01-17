@@ -43,6 +43,22 @@ final addEntryScreenModelProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef AddEntryScreenModelRef = AutoDisposeProviderRef<AddEntryScreenModel>;
+String _$userStreamHash() => r'51ccce2319acc79ad0fbf0f8824dfef709fa94b7';
+
+/// See also [userStream].
+@ProviderFor(userStream)
+final userStreamProvider = AutoDisposeStreamProvider<User?>.internal(
+  userStream,
+  name: r'userStreamProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$userStreamHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef UserStreamRef = AutoDisposeStreamProviderRef<User?>;
 String _$selectedCategoryNotifierHash() =>
     r'54eb168307fe5e94caf7c0e950e51e6341e090ae';
 

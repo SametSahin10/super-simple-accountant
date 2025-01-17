@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:super_simple_accountant/extensions.dart';
@@ -11,6 +10,7 @@ import 'package:super_simple_accountant/models/receipt/receipt_analysis_result.d
 import 'package:super_simple_accountant/navigation.dart';
 import 'package:super_simple_accountant/repositories/file_storage_repository.dart';
 import 'package:super_simple_accountant/state/entries_state_notifier.dart';
+import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/category_dropdown.dart';
 import 'package:uuid/uuid.dart';
 
@@ -131,7 +131,8 @@ class _ReceiptConfirmationScreenState
     final navigator = Navigator.of(context);
 
     // Check if user is authenticated
-    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    final user = await ref.watch(userStreamProvider.future);
+    String? userId = user?.uid;
 
     if (userId == null) {
       userId = await pushAuthScreen(navigator);

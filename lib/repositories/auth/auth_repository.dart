@@ -14,11 +14,14 @@ class AuthRepository {
   /// If the user is already signed in, it will return the current user ID.
   Future<String?> signInAnonymously() async {
     try {
-      String? userId = FirebaseAuth.instance.currentUser?.uid;
+      User? user = await FirebaseAuth.instance.userChanges().first;
+      String? userId = user?.uid;
 
       if (userId == null) {
+        debugPrint('User ID is null. Signing in anonymously...');
         final userCredential = await FirebaseAuth.instance.signInAnonymously();
         userId = userCredential.user?.uid;
+        debugPrint('Signed in anonymously. User ID: $userId');
       }
 
       return userId;
@@ -34,7 +37,7 @@ class AuthRepository {
     }
   }
 
-  Future<String?> signInWithGoogle() async {
+  Future<String?> signInWithGoogle(User? currentUser) async {
     try {
       final googleSignIn = GoogleSignIn();
       final googleUser = await googleSignIn.signIn();
@@ -49,7 +52,6 @@ class AuthRepository {
       );
 
       // Check if current user is anonymous
-      final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser?.isAnonymous ?? false) {
         final userCredential =
             await currentUser?.linkWithCredential(credential);
@@ -75,7 +77,7 @@ class AuthRepository {
     }
   }
 
-  Future<String?> signInWithApple() async {
+  Future<String?> signInWithApple(User? currentUser) async {
     try {
       final rawNonce = generateNonce();
       final sha256Nonce = sha256OfString(rawNonce);
@@ -108,7 +110,6 @@ class AuthRepository {
       );
 
       // Check if current user is anonymous
-      final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser?.isAnonymous ?? false) {
         final userCredential =
             await currentUser?.linkWithCredential(appleCredential);

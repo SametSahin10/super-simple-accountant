@@ -1,16 +1,18 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/repositories/auth/auth_repository.dart';
+import 'package:super_simple_accountant/state/providers.dart';
 import 'package:super_simple_accountant/widgets/auth/custom_sign_in_with_apple_button.dart';
 import 'package:super_simple_accountant/widgets/auth/sign_in_with_google_button.dart';
 
-class AuthScreen extends StatelessWidget {
+class AuthScreen extends ConsumerWidget {
   const AuthScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -42,7 +44,10 @@ class AuthScreen extends StatelessWidget {
                     context.showProgressDialog(
                         text: 'Signing in with Apple...');
                     final authRepository = AuthRepository();
-                    final result = await authRepository.signInWithApple();
+
+                    final user = await ref.watch(userStreamProvider.future);
+                    final result = await authRepository.signInWithApple(user);
+
                     navigator
                       ..pop() // Pop progress dialog
                       ..pop(result); // Pop auth screen with result
@@ -55,7 +60,10 @@ class AuthScreen extends StatelessWidget {
                   final navigator = Navigator.of(context);
                   context.showProgressDialog(text: 'Signing in with Google...');
                   final authRepository = AuthRepository();
-                  final result = await authRepository.signInWithGoogle();
+
+                  final user = await ref.watch(userStreamProvider.future);
+                  final result = await authRepository.signInWithGoogle(user);
+
                   navigator
                     ..pop() // Pop progress dialog
                     ..pop(result); // Pop auth screen with result
