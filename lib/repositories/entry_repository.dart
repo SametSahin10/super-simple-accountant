@@ -70,24 +70,33 @@ class EntryRepository {
     String? userId,
     required bool isPlusUser,
   }) async {
-    final hasInternetConnection =
-        await _connectivityService.hasInternetConnection();
+    try {
+      final hasInternetConnection =
+          await _connectivityService.hasInternetConnection();
 
-    final getRemoteEntries =
-        hasInternetConnection && userId != null && isPlusUser;
+      final getRemoteEntries =
+          hasInternetConnection && userId != null && isPlusUser;
 
-    if (getRemoteEntries) {
-      try {
-        final remoteEntries =
-            await _entryRemoteDataSource.getAllEntries(userId: userId);
-        // Update local storage with remote data
-        await _entryLocalDataSource.syncWithRemote(remoteEntries);
-        return remoteEntries;
-      } catch (e) {
-        return await _entryLocalDataSource.getEntries();
+      if (getRemoteEntries) {
+        try {
+          final remoteEntries =
+              await _entryRemoteDataSource.getAllEntries(userId: userId);
+          // Update local storage with remote data
+          await _entryLocalDataSource.syncWithRemote(remoteEntries);
+          return remoteEntries;
+        } catch (e) {
+          return await _entryLocalDataSource.getEntries();
+        }
       }
-    }
 
-    return await _entryLocalDataSource.getEntries();
+      return await _entryLocalDataSource.getEntries();
+    } catch (err) {
+      FirebaseCrashlytics.instance.recordError(
+        'Error getting entries: $err',
+        StackTrace.current,
+      );
+
+      rethrow;
+    }
   }
 }

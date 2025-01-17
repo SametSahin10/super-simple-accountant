@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/models/entries_state_model.dart';
@@ -33,25 +34,30 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
   }
 
   void getEntries() async {
-    state = state.copyWith(widgetState: WidgetState.loading);
-    final entryRepository = EntryRepository();
+    try {
+      state = state.copyWith(widgetState: WidgetState.loading);
+      final entryRepository = EntryRepository();
 
-    final userAsyncValue = await ref.watch(userStreamProvider.future);
-    final userId = userAsyncValue?.uid;
+      final userAsyncValue = await ref.watch(userStreamProvider.future);
+      final userId = userAsyncValue?.uid;
 
-    if (userId == null) {
-      FirebaseCrashlytics.instance.recordError(
-        'getEntries has been called with a null user ID. This should not happen.',
-        StackTrace.current,
+      if (userId == null) {
+        FirebaseCrashlytics.instance.recordError(
+          'getEntries has been called with a null user ID. This should not happen.',
+          StackTrace.current,
+        );
+      }
+
+      final entries = await entryRepository.getEntries(
+        userId: userId,
+        isPlusUser: isPlusUser(),
       );
+
+      state = state.copyWith(entries: entries, widgetState: WidgetState.loaded);
+    } catch (err) {
+      debugPrint('Error getting entries: $err');
+      state = state.copyWith(widgetState: WidgetState.error);
     }
-
-    final entries = await entryRepository.getEntries(
-      userId: userId,
-      isPlusUser: isPlusUser(),
-    );
-
-    state = state.copyWith(entries: entries, widgetState: WidgetState.loaded);
   }
 
   void addEntry(Entry entry) {

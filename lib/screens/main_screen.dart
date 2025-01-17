@@ -1,20 +1,22 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:super_simple_accountant/analytics_events.dart';
 import 'package:super_simple_accountant/extensions.dart';
 import 'package:super_simple_accountant/screens/about_screen.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
 import 'package:super_simple_accountant/screens/reports_screen.dart';
+import 'package:super_simple_accountant/state/providers.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   int _selectedIndex = 0;
 
   @override
@@ -25,6 +27,20 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userAsyncValue = ref.watch(userStreamProvider);
+
+    if (userAsyncValue.isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (userAsyncValue.hasError) {
+      return const Center(
+        child: Text('An error occurred.'),
+      );
+    }
+
     final screens = [
       const HomeScreen(),
       const ReportsScreen(),
