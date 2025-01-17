@@ -82,16 +82,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final entitlement = ref.read(entitlementNotifierProvider);
 
-    // if (entitlement == Entitlement.standard) {
-    //   // Launch the in-app purchase flow
-    //   final paywallResult = await RevenueCatUI.presentPaywall();
+    if (entitlement == Entitlement.standard) {
+      // Launch the in-app purchase flow
+      final paywallResult = await RevenueCatUI.presentPaywall();
 
-    //   if (paywallResult != PaywallResult.purchased) return;
+      if (paywallResult != PaywallResult.purchased) return;
 
-    //   final userId = await pushAuthScreen(navigator);
-
-    //   debugPrint('User ID: $userId');
-    // }
+      await pushAuthScreen(navigator);
+    }
 
     FirebaseAnalytics.instance.logEvent(
       name: AnalyticsEvents.scanReceiptButtonPressed,
