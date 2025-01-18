@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import '../models/entry.dart';
 
@@ -44,8 +45,19 @@ class EntryRemoteDataSource {
           .where('userId', isEqualTo: userId)
           .get();
 
-      final entries =
-          querySnapshot.docs.map((doc) => Entry.fromJson(doc.data())).toList();
+      final entries = <Entry>[];
+
+      for (final doc in querySnapshot.docs) {
+        try {
+          final entry = Entry.fromJson(doc.data());
+          entries.add(entry);
+        } catch (e) {
+          FirebaseCrashlytics.instance.recordError(
+            'Failed to parse entry: $e. Entry: ${doc.data()}',
+            StackTrace.current,
+          );
+        }
+      }
 
       debugPrint('Retrieved ${entries.length} entries');
 

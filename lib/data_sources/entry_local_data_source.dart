@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/entry.dart';
 
@@ -34,13 +35,21 @@ class EntryLocalDataSource {
     final prefs = await SharedPreferences.getInstance();
     final entriesJson = prefs.getStringList(_key) ?? [];
 
-    return entriesJson.map(
-      (entryAsString) {
-        return Entry.fromJson(
-          jsonDecode(entryAsString),
+    final entries = <Entry>[];
+
+    for (final entryAsString in entriesJson) {
+      try {
+        final entry = Entry.fromJson(jsonDecode(entryAsString));
+        entries.add(entry);
+      } catch (e) {
+        FirebaseCrashlytics.instance.recordError(
+          'Failed to parse entry: $e. Entry: $entryAsString',
+          StackTrace.current,
         );
-      },
-    ).toList();
+      }
+    }
+
+    return entries;
   }
 
   Future<void> markEntrySynced(Entry entry) async {
