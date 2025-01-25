@@ -7,14 +7,16 @@ part of 'entry.dart';
 // **************************************************************************
 
 _$EntryImpl _$$EntryImplFromJson(Map<String, dynamic> json) => _$EntryImpl(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       amount: (json['amount'] as num).toDouble(),
       createdAt: DateTime.parse(json['createdAt'] as String),
       description: json['description'] as String?,
       category: json['category'] == null
           ? null
           : Category.fromJson(json['category'] as Map<String, dynamic>),
-      source: EntrySource.fromJson(json['source'] as Map<String, dynamic>),
+      source: json['source'] == null
+          ? null
+          : EntrySource.fromJson(json['source'] as Map<String, dynamic>),
       isSynced: json['isSynced'] as bool? ?? false,
     );
 
@@ -25,7 +27,7 @@ Map<String, dynamic> _$$EntryImplToJson(_$EntryImpl instance) =>
       'createdAt': instance.createdAt.toIso8601String(),
       'description': instance.description,
       'category': instance.category?.toJson(),
-      'source': instance.source.toJson(),
+      'source': instance.source?.toJson(),
       'isSynced': instance.isSynced,
     };
 

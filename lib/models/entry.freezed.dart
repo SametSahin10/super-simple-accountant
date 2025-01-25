@@ -20,12 +20,12 @@ Entry _$EntryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Entry {
-  String get id => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   double get amount => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   Category? get category => throw _privateConstructorUsedError;
-  EntrySource get source => throw _privateConstructorUsedError;
+  EntrySource? get source => throw _privateConstructorUsedError;
   bool get isSynced => throw _privateConstructorUsedError;
 
   /// Serializes this Entry to a JSON map.
@@ -43,16 +43,16 @@ abstract class $EntryCopyWith<$Res> {
       _$EntryCopyWithImpl<$Res, Entry>;
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       double amount,
       DateTime createdAt,
       String? description,
       Category? category,
-      EntrySource source,
+      EntrySource? source,
       bool isSynced});
 
   $CategoryCopyWith<$Res>? get category;
-  $EntrySourceCopyWith<$Res> get source;
+  $EntrySourceCopyWith<$Res>? get source;
 }
 
 /// @nodoc
@@ -70,19 +70,19 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? amount = null,
     Object? createdAt = null,
     Object? description = freezed,
     Object? category = freezed,
-    Object? source = null,
+    Object? source = freezed,
     Object? isSynced = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -99,10 +99,10 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as Category?,
-      source: null == source
+      source: freezed == source
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
-              as EntrySource,
+              as EntrySource?,
       isSynced: null == isSynced
           ? _value.isSynced
           : isSynced // ignore: cast_nullable_to_non_nullable
@@ -128,8 +128,12 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $EntrySourceCopyWith<$Res> get source {
-    return $EntrySourceCopyWith<$Res>(_value.source, (value) {
+  $EntrySourceCopyWith<$Res>? get source {
+    if (_value.source == null) {
+      return null;
+    }
+
+    return $EntrySourceCopyWith<$Res>(_value.source!, (value) {
       return _then(_value.copyWith(source: value) as $Val);
     });
   }
@@ -143,18 +147,18 @@ abstract class _$$EntryImplCopyWith<$Res> implements $EntryCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
+      {String? id,
       double amount,
       DateTime createdAt,
       String? description,
       Category? category,
-      EntrySource source,
+      EntrySource? source,
       bool isSynced});
 
   @override
   $CategoryCopyWith<$Res>? get category;
   @override
-  $EntrySourceCopyWith<$Res> get source;
+  $EntrySourceCopyWith<$Res>? get source;
 }
 
 /// @nodoc
@@ -170,19 +174,19 @@ class __$$EntryImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? amount = null,
     Object? createdAt = null,
     Object? description = freezed,
     Object? category = freezed,
-    Object? source = null,
+    Object? source = freezed,
     Object? isSynced = null,
   }) {
     return _then(_$EntryImpl(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       amount: null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -199,10 +203,10 @@ class __$$EntryImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as Category?,
-      source: null == source
+      source: freezed == source
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
-              as EntrySource,
+              as EntrySource?,
       isSynced: null == isSynced
           ? _value.isSynced
           : isSynced // ignore: cast_nullable_to_non_nullable
@@ -215,19 +219,19 @@ class __$$EntryImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$EntryImpl implements _Entry {
   const _$EntryImpl(
-      {required this.id,
+      {this.id,
       required this.amount,
       required this.createdAt,
       this.description,
       this.category,
-      required this.source,
+      this.source,
       this.isSynced = false});
 
   factory _$EntryImpl.fromJson(Map<String, dynamic> json) =>
       _$$EntryImplFromJson(json);
 
   @override
-  final String id;
+  final String? id;
   @override
   final double amount;
   @override
@@ -237,7 +241,7 @@ class _$EntryImpl implements _Entry {
   @override
   final Category? category;
   @override
-  final EntrySource source;
+  final EntrySource? source;
   @override
   @JsonKey()
   final bool isSynced;
@@ -288,18 +292,18 @@ class _$EntryImpl implements _Entry {
 
 abstract class _Entry implements Entry {
   const factory _Entry(
-      {required final String id,
+      {final String? id,
       required final double amount,
       required final DateTime createdAt,
       final String? description,
       final Category? category,
-      required final EntrySource source,
+      final EntrySource? source,
       final bool isSynced}) = _$EntryImpl;
 
   factory _Entry.fromJson(Map<String, dynamic> json) = _$EntryImpl.fromJson;
 
   @override
-  String get id;
+  String? get id;
   @override
   double get amount;
   @override
@@ -309,7 +313,7 @@ abstract class _Entry implements Entry {
   @override
   Category? get category;
   @override
-  EntrySource get source;
+  EntrySource? get source;
   @override
   bool get isSynced;
 

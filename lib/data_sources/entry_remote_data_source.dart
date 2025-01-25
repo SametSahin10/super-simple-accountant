@@ -13,7 +13,7 @@ class EntryRemoteDataSource {
       final entryJson = entry.toJson();
       await docRef.set(entryJson);
       debugPrint('Entry created with ID: ${entry.id}');
-      return entry.id;
+      return docRef.id;
     } catch (e) {
       debugPrint('Error creating entry: $e');
       rethrow;

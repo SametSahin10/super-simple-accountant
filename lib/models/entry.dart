@@ -7,12 +7,12 @@ part 'entry.g.dart';
 @freezed
 class Entry with _$Entry {
   const factory Entry({
-    required String id,
+    String? id,
     required double amount,
     required DateTime createdAt,
     String? description,
     Category? category,
-    required EntrySource source,
+    EntrySource? source,
     @Default(false) bool isSynced,
   }) = _Entry;
 
