@@ -29,6 +29,7 @@ class AddEntryScreen extends ConsumerWidget {
     final descriptionController = addEntryScreenModel.descriptionController;
 
     return GestureDetector(
+      key: const ValueKey('add_entry_screen_gesture_detector'),
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: ResponsiveAppBar(
@@ -43,6 +44,7 @@ class AddEntryScreen extends ConsumerWidget {
                   ? context.width * 0.3
                   : context.width,
               child: ListView(
+                key: const ValueKey('add_entry_screen_list_view'),
                 children: [
                   BannerAdWidget(
                     adUnitId: getAdUnitId(AdUnit.addEntryScreenBanner),
@@ -52,6 +54,7 @@ class AddEntryScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       TextField(
+                        key: const ValueKey('amount_text_field'),
                         controller: amountController,
                         keyboardType: TextInputType.number,
                         style: const TextStyle(fontSize: 32.0),
@@ -65,6 +68,7 @@ class AddEntryScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: TextField(
+                          key: const ValueKey('description_text_field'),
                           controller: descriptionController,
                           style: const TextStyle(fontSize: 28.0),
                           decoration: InputDecoration(
@@ -75,6 +79,7 @@ class AddEntryScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 10),
                       CategoryDropdown(
+                        key: const ValueKey('category_dropdown'),
                         onCategorySelected: (selectedCategory) {
                           final notifier = ref
                               .read(selectedCategoryNotifierProvider.notifier);
@@ -109,6 +114,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         EntryActionButton(
+          key: const ValueKey('decrease_amount_button'),
           iconPath: Assets.minus,
           color: Colors.red,
           onTap: () {
@@ -120,6 +126,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
           },
         ),
         EntryActionButton(
+          key: const ValueKey('increase_amount_button'),
           iconPath: Assets.plus,
           color: Colors.green,
           onTap: () {

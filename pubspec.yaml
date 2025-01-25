@@ -65,6 +65,8 @@ dev_dependencies:
   riverpod_generator: ^2.4.3
   custom_lint: ^0.7.0
   riverpod_lint: ^2.3.13
+  integration_test:
+    sdk: flutter
 
 icons_launcher:
   image_path: "assets/icons/app_icon.png"

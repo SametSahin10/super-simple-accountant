@@ -55,6 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         foregroundColor: Colors.white,
         children: [
           SpeedDialChild(
+            key: const ValueKey('add_basic_entry_speed_dial_child'),
             child: const Icon(Icons.edit),
             label: 'Add Basic Entry',
             onTap: () {
@@ -66,6 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             },
           ),
           SpeedDialChild(
+            key: const ValueKey('scan_receipt_speed_dial_child'),
             child: const Icon(Icons.receipt),
             label: 'Scan Receipt',
             onTap: () => _handleReceiptScan(context),
