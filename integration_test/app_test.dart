@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:super_simple_accountant/main.dart' as app;
 import 'package:super_simple_accountant/screens/add_entry_screen.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
