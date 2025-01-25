@@ -10,9 +10,9 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:super_simple_accountant/exceptions.dart';
 
 class AuthRepository {
-  /// Signs in anonymously and returns the user ID.
+  /// Signs in and returns the user ID.
   /// If the user is already signed in, it will return the current user ID.
-  Future<String?> signInAnonymously() async {
+  Future<String?> signIn() async {
     try {
       User? user = await FirebaseAuth.instance.userChanges().first;
       String? userId = user?.uid;

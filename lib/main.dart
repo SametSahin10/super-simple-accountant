@@ -40,7 +40,7 @@ Future<void> main() async {
     FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(false);
   }
 
-  final userId = await AuthRepository().signInAnonymously();
+  final userId = await AuthRepository().signIn();
   await configureRevenueCat(userId: userId);
 
   if (!kIsWeb) MobileAds.instance.initialize();
