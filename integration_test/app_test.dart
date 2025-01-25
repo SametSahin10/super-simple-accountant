@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 import 'package:super_simple_accountant/main.dart' as app;
 import 'package:super_simple_accountant/screens/add_entry_screen.dart';
 import 'package:super_simple_accountant/screens/home_screen.dart';
+import 'package:super_simple_accountant/widgets/bottom_sheets/choose_image_source_bottom_sheet.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -14,13 +17,10 @@ void main() {
       'Add basic entry',
       (tester) async {
         await app.main();
-
         await tester.pumpAndSettle();
 
         // Tap on the floating action button
-        final speedDial = find.byType(SpeedDial);
-        await tester.tap(speedDial);
-        await tester.pumpAndSettle();
+        await _tapFloatingActionButton(tester);
 
         await tester.pump(const Duration(seconds: 1));
 
@@ -71,5 +71,35 @@ void main() {
         expect(netAmount, findsOne);
       },
     );
+
+    testWidgets(
+      'do not show the choose image source bottom sheet on standard plan',
+      (tester) async {
+        await app.main();
+        await tester.pumpAndSettle();
+
+        await _tapFloatingActionButton(tester);
+
+        final scanReceiptSpeedDialChild = find.byKey(
+          const ValueKey('scan_receipt_speed_dial_child'),
+        );
+
+        await tester.tap(scanReceiptSpeedDialChild);
+        await tester.pumpAndSettle();
+        await tester.pump(const Duration(seconds: 1));
+
+        // Confirm that the modal bottom sheet is not shown
+        final chooseImageSourceBottomSheet =
+            find.byType(ChooseImageSourceBottomSheet);
+
+        expect(chooseImageSourceBottomSheet, findsNothing);
+      },
+    );
   });
+}
+
+Future<void> _tapFloatingActionButton(WidgetTester tester) async {
+  final speedDial = find.byType(SpeedDial);
+  await tester.tap(speedDial);
+  await tester.pumpAndSettle();
 }
