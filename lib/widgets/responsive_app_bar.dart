@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:super_simple_accountant/assets.dart';
@@ -95,9 +96,10 @@ class _AppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 6),
-      child: Text(
+      child: AutoSizeText(
         title,
         style: TextStyle(fontSize: context.largerThanMobile ? 32 : 24),
+        maxLines: 1,
       ),
     );
   }
