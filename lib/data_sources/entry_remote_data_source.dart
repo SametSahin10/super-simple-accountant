@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 import '../models/entry.dart';
 
+@lazySingleton
 class EntryRemoteDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _collection = 'entries';

@@ -1,29 +1,37 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 import 'package:super_simple_accountant/data_sources/entry_local_data_source.dart';
 import 'package:super_simple_accountant/data_sources/entry_remote_data_source.dart';
 import 'package:super_simple_accountant/models/entry.dart';
 import 'package:super_simple_accountant/services/connectivity_service.dart';
 
+@lazySingleton
 class EntryRepository {
-  final _entryRemoteDataSource = EntryRemoteDataSource();
-  final _entryLocalDataSource = EntryLocalDataSource();
-  final _connectivityService = ConnectivityService();
+  final EntryRemoteDataSource entryRemoteDataSource;
+  final EntryLocalDataSource entryLocalDataSource;
+  final ConnectivityService connectivityService;
+
+  EntryRepository({
+    required this.entryRemoteDataSource,
+    required this.entryLocalDataSource,
+    required this.connectivityService,
+  });
 
   Future<void> syncLocalEntriesToRemote(String userId) async {
     try {
       debugPrint('Syncing local entries to remote...');
 
-      if (!await _connectivityService.hasInternetConnection()) return;
+      if (!await connectivityService.hasInternetConnection()) return;
 
-      final localEntries = await _entryLocalDataSource.getEntries();
+      final localEntries = await entryLocalDataSource.getEntries();
 
       for (final entry in localEntries) {
         if (entry.isSynced) continue;
 
         try {
-          await _entryRemoteDataSource.createEntry(entry);
-          await _entryLocalDataSource.markEntrySynced(entry);
+          await entryRemoteDataSource.createEntry(entry);
+          await entryLocalDataSource.markEntrySynced(entry);
         } catch (e) {
           continue;
         }
@@ -38,13 +46,14 @@ class EntryRepository {
     required Entry entry,
     required bool isPlusUser,
   }) async {
-    final unsyncedEntry = entry.copyWith(isSynced: false);
-    await _entryLocalDataSource.saveEntry(unsyncedEntry);
+    // Save locally first
+    await entryLocalDataSource.saveEntry(entry.copyWith(isSynced: false));
 
-    if (await _connectivityService.hasInternetConnection() && isPlusUser) {
+    if (await connectivityService.hasInternetConnection() && isPlusUser) {
       try {
-        await _entryRemoteDataSource.createEntry(entry);
-        await _entryLocalDataSource.saveEntry(entry);
+        await entryRemoteDataSource.createEntry(entry);
+        // Just mark as synced instead of full save
+        await entryLocalDataSource.markEntrySynced(entry);
       } catch (e) {
         // Handle error but don't rethrow since local save succeeded
       }
@@ -55,11 +64,11 @@ class EntryRepository {
     required Entry entry,
     required bool isPlusUser,
   }) async {
-    await _entryLocalDataSource.deleteEntry(entry);
+    await entryLocalDataSource.deleteEntry(entry);
 
-    if (await _connectivityService.hasInternetConnection() && isPlusUser) {
+    if (await connectivityService.hasInternetConnection() && isPlusUser) {
       try {
-        await _entryRemoteDataSource.deleteEntry(entry);
+        await entryRemoteDataSource.deleteEntry(entry);
       } catch (e) {
         // Handle error but don't rethrow since local delete succeeded
       }
@@ -72,7 +81,7 @@ class EntryRepository {
   }) async {
     try {
       final hasInternetConnection =
-          await _connectivityService.hasInternetConnection();
+          await connectivityService.hasInternetConnection();
 
       final getRemoteEntries =
           hasInternetConnection && userId != null && isPlusUser;
@@ -80,16 +89,16 @@ class EntryRepository {
       if (getRemoteEntries) {
         try {
           final remoteEntries =
-              await _entryRemoteDataSource.getAllEntries(userId: userId);
+              await entryRemoteDataSource.getAllEntries(userId: userId);
           // Update local storage with remote data
-          await _entryLocalDataSource.syncWithRemote(remoteEntries);
+          await entryLocalDataSource.syncWithRemote(remoteEntries);
           return remoteEntries;
         } catch (e) {
-          return await _entryLocalDataSource.getEntries();
+          return await entryLocalDataSource.getEntries();
         }
       }
 
-      return await _entryLocalDataSource.getEntries();
+      return await entryLocalDataSource.getEntries();
     } catch (err) {
       FirebaseCrashlytics.instance.recordError(
         'Error getting entries: $err',

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/entry.dart';
 
+@lazySingleton
 class EntryLocalDataSource {
   static const String _key = 'entries';
 

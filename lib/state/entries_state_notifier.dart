@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:super_simple_accountant/di/di.dart';
 import 'package:super_simple_accountant/enums.dart';
 import 'package:super_simple_accountant/models/entries_state_model.dart';
 import 'package:super_simple_accountant/models/entry.dart';
@@ -43,7 +44,7 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
   void getEntries() async {
     try {
       state = state.copyWith(widgetState: WidgetState.loading);
-      final entryRepository = EntryRepository();
+      final entryRepository = getIt<EntryRepository>();
 
       final userAsyncValue = await ref.watch(userStreamProvider.future);
       final userId = userAsyncValue?.uid;
@@ -71,7 +72,7 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
     final newEntries = [...state.entries, entry];
     state = state.copyWith(entries: newEntries);
 
-    final entryRepository = EntryRepository();
+    final entryRepository = getIt<EntryRepository>();
 
     entryRepository.saveEntry(
       entry: entry,
@@ -83,7 +84,7 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
     final newEntries = state.entries.where((e) => e != entry).toList();
     state = state.copyWith(entries: newEntries);
 
-    final entryRepository = EntryRepository();
+    final entryRepository = getIt<EntryRepository>();
 
     entryRepository.deleteEntry(
       entry: entry,
@@ -123,7 +124,7 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
   }
 
   Future<void> _syncEntries() async {
-    final entryRepository = EntryRepository();
+    final entryRepository = getIt<EntryRepository>();
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     if (userId != null) {

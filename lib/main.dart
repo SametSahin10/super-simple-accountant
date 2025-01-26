@@ -10,6 +10,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:super_simple_accountant/colors.dart';
 import 'package:super_simple_accountant/currency_formatter.dart';
+import 'package:super_simple_accountant/di/di.dart';
 import 'package:super_simple_accountant/firebase_options.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:super_simple_accountant/repositories/auth/auth_repository.dart';
@@ -22,6 +23,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: 'environment/.env');
+  await configureDependencies();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
