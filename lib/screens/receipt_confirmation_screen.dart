@@ -157,9 +157,12 @@ class _ReceiptConfirmationScreenState
 
     debugPrint('imageUrl: $imageUrl');
 
+    final amount = double.tryParse(_amountController.text) ?? 0;
+
     final entry = Entry(
       id: const Uuid().v4(),
-      amount: double.tryParse(_amountController.text) ?? 0,
+      userId: userId,
+      amount: -amount,
       createdAt: DateTime.now(),
       description: _merchantController.text,
       category: _selectedCategory,

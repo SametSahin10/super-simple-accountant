@@ -26,6 +26,7 @@ mixin _$Entry {
   String? get description => throw _privateConstructorUsedError;
   Category? get category => throw _privateConstructorUsedError;
   EntrySource? get source => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   bool get isSynced => throw _privateConstructorUsedError;
 
   /// Serializes this Entry to a JSON map.
@@ -49,6 +50,7 @@ abstract class $EntryCopyWith<$Res> {
       String? description,
       Category? category,
       EntrySource? source,
+      String? userId,
       bool isSynced});
 
   $CategoryCopyWith<$Res>? get category;
@@ -76,6 +78,7 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
     Object? description = freezed,
     Object? category = freezed,
     Object? source = freezed,
+    Object? userId = freezed,
     Object? isSynced = null,
   }) {
     return _then(_value.copyWith(
@@ -103,6 +106,10 @@ class _$EntryCopyWithImpl<$Res, $Val extends Entry>
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
               as EntrySource?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
       isSynced: null == isSynced
           ? _value.isSynced
           : isSynced // ignore: cast_nullable_to_non_nullable
@@ -153,6 +160,7 @@ abstract class _$$EntryImplCopyWith<$Res> implements $EntryCopyWith<$Res> {
       String? description,
       Category? category,
       EntrySource? source,
+      String? userId,
       bool isSynced});
 
   @override
@@ -180,6 +188,7 @@ class __$$EntryImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? category = freezed,
     Object? source = freezed,
+    Object? userId = freezed,
     Object? isSynced = null,
   }) {
     return _then(_$EntryImpl(
@@ -207,6 +216,10 @@ class __$$EntryImplCopyWithImpl<$Res>
           ? _value.source
           : source // ignore: cast_nullable_to_non_nullable
               as EntrySource?,
+      userId: freezed == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
       isSynced: null == isSynced
           ? _value.isSynced
           : isSynced // ignore: cast_nullable_to_non_nullable
@@ -225,6 +238,7 @@ class _$EntryImpl implements _Entry {
       this.description,
       this.category,
       this.source,
+      this.userId,
       this.isSynced = false});
 
   factory _$EntryImpl.fromJson(Map<String, dynamic> json) =>
@@ -243,12 +257,14 @@ class _$EntryImpl implements _Entry {
   @override
   final EntrySource? source;
   @override
+  final String? userId;
+  @override
   @JsonKey()
   final bool isSynced;
 
   @override
   String toString() {
-    return 'Entry(id: $id, amount: $amount, createdAt: $createdAt, description: $description, category: $category, source: $source, isSynced: $isSynced)';
+    return 'Entry(id: $id, amount: $amount, createdAt: $createdAt, description: $description, category: $category, source: $source, userId: $userId, isSynced: $isSynced)';
   }
 
   @override
@@ -265,6 +281,7 @@ class _$EntryImpl implements _Entry {
             (identical(other.category, category) ||
                 other.category == category) &&
             (identical(other.source, source) || other.source == source) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.isSynced, isSynced) ||
                 other.isSynced == isSynced));
   }
@@ -272,7 +289,7 @@ class _$EntryImpl implements _Entry {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, amount, createdAt,
-      description, category, source, isSynced);
+      description, category, source, userId, isSynced);
 
   /// Create a copy of Entry
   /// with the given fields replaced by the non-null parameter values.
@@ -298,6 +315,7 @@ abstract class _Entry implements Entry {
       final String? description,
       final Category? category,
       final EntrySource? source,
+      final String? userId,
       final bool isSynced}) = _$EntryImpl;
 
   factory _Entry.fromJson(Map<String, dynamic> json) = _$EntryImpl.fromJson;
@@ -314,6 +332,8 @@ abstract class _Entry implements Entry {
   Category? get category;
   @override
   EntrySource? get source;
+  @override
+  String? get userId;
   @override
   bool get isSynced;
 

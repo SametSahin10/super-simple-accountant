@@ -22,6 +22,10 @@ class EntitlementNotifier extends _$EntitlementNotifier {
     state = _getEntitlementFromInfo(info);
   }
 
+  void setEntitlement(Entitlement entitlement) {
+    state = entitlement;
+  }
+
   Entitlement _getEntitlementFromInfo(CustomerInfo info) {
     return info.entitlements.active.containsKey(plusEntitlementId)
         ? Entitlement.plus

@@ -13,6 +13,7 @@ class Entry with _$Entry {
     String? description,
     Category? category,
     EntrySource? source,
+    String? userId,
     @Default(false) bool isSynced,
   }) = _Entry;
 

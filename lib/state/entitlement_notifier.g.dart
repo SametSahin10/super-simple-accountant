@@ -7,7 +7,7 @@ part of 'entitlement_notifier.dart';
 // **************************************************************************
 
 String _$entitlementNotifierHash() =>
-    r'777d05f7cace1efbb6eb051c5de660bb6f5bbcf3';
+    r'e8ca675b05312780b3e9779e6b3bf2d92ea60ce0';
 
 /// See also [EntitlementNotifier].
 @ProviderFor(EntitlementNotifier)

@@ -145,7 +145,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     required BuildContext context,
     required WidgetRef ref,
     required Category? selectedCategory,
-  }) {
+  }) async {
     FirebaseAnalytics.instance.logEvent(
       name: AnalyticsEvents.increaseAmountButtonPressed,
     );
@@ -167,8 +167,12 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     double currentAmount = double.tryParse(amountController.text) ?? 0.0;
     String description = descriptionController.text;
 
+    final user = await ref.watch(userStreamProvider.future);
+    String? userId = user?.uid;
+
     final entry = Entry(
       id: const Uuid().v4(),
+      userId: userId,
       source: EntrySource.basic(),
       amount: currentAmount.abs(),
       description: description,
@@ -187,7 +191,7 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     required BuildContext context,
     required WidgetRef ref,
     required Category? selectedCategory,
-  }) {
+  }) async {
     FirebaseAnalytics.instance.logEvent(
       name: AnalyticsEvents.decreaseAmountButtonPressed,
     );
@@ -209,8 +213,12 @@ class _IncreaseAndDecreaseButtons extends ConsumerWidget {
     double currentAmount = double.tryParse(amountController.text) ?? 0.0;
     String description = descriptionController.text;
 
+    final user = await ref.watch(userStreamProvider.future);
+    String? userId = user?.uid;
+
     final entry = Entry(
       id: const Uuid().v4(),
+      userId: userId,
       source: EntrySource.basic(),
       amount: -currentAmount.abs(),
       description: description,

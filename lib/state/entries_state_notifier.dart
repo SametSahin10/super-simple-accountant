@@ -26,6 +26,13 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
 
     _connectivitySubscription ??= syncEntriesWhenConnected();
 
+    // Watch entitlement changes and sync when becoming Plus
+    ref.listen(entitlementNotifierProvider, (previous, next) {
+      if (previous != Entitlement.plus && next == Entitlement.plus) {
+        _syncEntries();
+      }
+    });
+
     ref.onDispose(() {
       _connectivitySubscription?.cancel();
     });
@@ -111,14 +118,22 @@ class EntriesStateNotifier extends _$EntriesStateNotifier {
       final connectivityService = ConnectivityService();
       final isConnected = connectivityService.checkIfConnectedByResult(result);
 
-      final entryRepository = EntryRepository();
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-
-      if (isConnected) {
-        state = state.copyWith(isSyncing: true);
-        await entryRepository.syncLocalEntriesToRemote(userId!);
-        state = state.copyWith(isSyncing: false);
-      }
+      if (isConnected) _syncEntries();
     });
+  }
+
+  Future<void> _syncEntries() async {
+    final entryRepository = EntryRepository();
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId != null) {
+      state = state.copyWith(isSyncing: true);
+      await entryRepository.syncLocalEntriesToRemote(userId);
+      state = state.copyWith(isSyncing: false);
+
+      // Get entries again.
+      //This ensures that the entries from remote are fetched.
+      getEntries();
+    }
   }
 }

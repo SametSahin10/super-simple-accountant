@@ -17,6 +17,7 @@ _$EntryImpl _$$EntryImplFromJson(Map<String, dynamic> json) => _$EntryImpl(
       source: json['source'] == null
           ? null
           : EntrySource.fromJson(json['source'] as Map<String, dynamic>),
+      userId: json['userId'] as String?,
       isSynced: json['isSynced'] as bool? ?? false,
     );
 
@@ -28,6 +29,7 @@ Map<String, dynamic> _$$EntryImplToJson(_$EntryImpl instance) =>
       'description': instance.description,
       'category': instance.category?.toJson(),
       'source': instance.source?.toJson(),
+      'userId': instance.userId,
       'isSynced': instance.isSynced,
     };
 
