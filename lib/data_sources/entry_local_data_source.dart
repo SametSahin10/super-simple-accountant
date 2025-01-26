@@ -58,9 +58,16 @@ class EntryLocalDataSource {
   }
 
   Future<void> syncWithRemote(List<Entry> remoteEntries) async {
+    await clearEntries();
+
     for (final entry in remoteEntries) {
       final syncedEntry = entry.copyWith(isSynced: true);
       await saveEntry(syncedEntry);
     }
+  }
+
+  Future<void> clearEntries() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_key);
   }
 }
